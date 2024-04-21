@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <h1>Home</h1>
-    <p>Welcome to the Home page!</p>
+    <h1 class="text-6xl font-bold">Home</h1>
+    <p class="text-3xl font-normal">Welcome to the Home page!</p>
   </div>
 </template>
