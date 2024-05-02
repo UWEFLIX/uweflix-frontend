@@ -5,6 +5,7 @@ import TextInput from '@/components/TextInput.vue'
 import { ref } from 'vue'
 import { useAuthStore } from '../stores/auth_store'
 import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
 
 const form = ref({
   email: '',
@@ -14,11 +15,13 @@ const form = ref({
 const isLoading = ref(false)
 const authStore = useAuthStore()
 const toast = useToast()
+const router = useRouter()
 
 async function submit() {
   isLoading.value = true
   try {
     await authStore.login(form.value.email, form.value.password)
+    await router.push({ name: 'Home' })
   } catch (e) {
     toast.error(e)
   }
