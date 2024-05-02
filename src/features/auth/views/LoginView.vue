@@ -3,18 +3,34 @@ import InputLabel from '@/components/InputLabel.vue'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import TextInput from '@/components/TextInput.vue'
 import { ref } from 'vue'
+import { useAuthStore } from '../stores/auth_store'
+import { useToast } from 'vue-toastification'
 
 const form = ref({
   email: '',
   password: ''
 })
+
+const isLoading = ref(false)
+const authStore = useAuthStore()
+const toast = useToast()
+
+async function submit() {
+  isLoading.value = true
+  try {
+    await authStore.login(form.value.email, form.value.password)
+  } catch (e) {
+    toast.error(e)
+  }
+  isLoading.value = false
+}
 </script>
 
 <template>
   <div class="flex flex-col h-screen bg-gray-100 items-center justify-center">
     <form
-      action="#"
-      class="bg-white w-full max-w-xl space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
+      @submit.prevent="submit"
+      class="bg-white w-full max-w-lg space-y-4 rounded-lg p-4 shadow-lg sm:p-6 lg:p-8"
     >
       <p class="text-center text-lg font-medium">Sign in to your account</p>
 
@@ -35,7 +51,7 @@ const form = ref({
         />
       </div>
 
-      <PrimaryButton type="submit">Sign in</PrimaryButton>
+      <PrimaryButton type="submit" :disabled="isLoading">Sign in</PrimaryButton>
     </form>
   </div>
 </template>
