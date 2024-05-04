@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  to: Object
-  name: string
+  to: Object,
+  active: boolean,
 }>()
 </script>
 
@@ -9,9 +9,12 @@ defineProps<{
   <li>
     <RouterLink
       :to="to"
-      class="block rounded-lg bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700"
+      class="flex items-center px-3 py-1.5 text-gray-900 rounded-md hover:bg-gray-100 transition"
+      :class="{
+        'text-white bg-primary-500 hover:bg-primary-500': active
+      }"
     >
-      {{ name }}
+      <slot />
     </RouterLink>
   </li>
 </template>
