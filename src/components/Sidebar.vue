@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import SidebarLink from '@/components/SidebarLink.vue'
 import SidebarDropdown from '@/components/SidebarDropdown.vue'
+import { useAuthStore } from '@/features/auth/stores/auth_store'
+
+const authStore = useAuthStore()
+console.log(authStore.tokenContent)
 </script>
 
 <template>
@@ -37,7 +41,7 @@ import SidebarDropdown from '@/components/SidebarDropdown.vue'
           <p class="text-xs">
             <strong class="block font-medium">Eric Frusciante</strong>
 
-            <span> eric@frusciante.com </span>
+            <span>{{ authStore?.tokenContent!['sub'] }}</span>
           </p>
         </div>
       </a>

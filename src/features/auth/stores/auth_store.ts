@@ -7,8 +7,15 @@ export const useAuthStore = defineStore({
 
   state: () => ({
     authRepository: new AuthRepository(),
-    token: useStorage<string | undefined>('token', undefined)
+    token: useStorage<string | undefined>('token', undefined),
   }),
+
+  getters: {
+    tokenContent: (state) => {
+      const payload = state.token!.split('.')[1]
+      return JSON.parse(atob(payload))
+    }
+  },
 
   actions: {
     async login(email: string, password: string) {
