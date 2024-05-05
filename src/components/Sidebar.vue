@@ -1,50 +1,23 @@
 <script setup lang="ts">
-import SidebarLink from '@/components/SidebarLink.vue'
-import SidebarDropdown from '@/components/SidebarDropdown.vue'
-import { useAuthStore } from '@/features/auth/stores/auth_store'
-
-const authStore = useAuthStore()
+defineEmits(['close-sidebar'])
+defineProps<{
+  show: boolean
+}>()
 </script>
 
 <template>
-  <aside class="flex w-64 h-screen flex-col justify-between border-e bg-white">
+  <!-- Sidebar Overlay -->
+  <div
+    v-if="show"
+    @click="$emit('close-sidebar')"
+    class="fixed inset-0 bg-black opacity-50 transition-opacity z-30"
+  ></div>
+
+  <aside class="fixed top-0 left-0 z-40 w-64 h-screen bg-white transition-transform duration-300 shadow-md"
+         :class="show ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
+         aria-label="Sidebar">
     <div class="px-4 py-6">
-      <RouterLink :to="{ name: 'Home' }" class="block w-10">
-        <img src="/logo.jpg" class="object-cover rounded-lg" alt="Logo" />
-      </RouterLink>
-
-      <ul class="mt-6 space-y-2">
-        <SidebarLink :to="{ name: 'Home' }" :active="true">Home</SidebarLink>
-        <SidebarLink :to="{ name: 'Cities' }" :active="true">Cities</SidebarLink>
-
-        <SidebarDropdown :active="false">
-          <template #button-content>
-            Test dropdown
-          </template>
-          <template #dropdown-content>
-            <SidebarLink :to="{ name: 'Home' }" :active="false">Test 1</SidebarLink>
-            <SidebarLink :to="{ name: 'Home' }" :active="false">Test 2</SidebarLink>
-          </template>
-        </SidebarDropdown>
-      </ul>
-    </div>
-
-    <div class="sticky inset-x-0 bottom-0 border-t border-gray-100">
-      <a href="#" class="flex items-center gap-2 bg-white p-4 hover:bg-gray-50">
-        <img
-          alt="Profile image"
-          src="https://api.dicebear.com/8.x/fun-emoji/svg?seed=Peanut"
-          class="size-10 rounded-full object-cover"
-        />
-
-        <div>
-          <p class="text-xs">
-            <strong class="block font-medium">Eric Frusciante</strong>
-
-            <span>{{ authStore?.tokenContent!['sub'] }}</span>
-          </p>
-        </div>
-      </a>
+      <slot></slot>
     </div>
   </aside>
 </template>
