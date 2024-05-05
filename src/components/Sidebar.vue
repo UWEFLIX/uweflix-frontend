@@ -4,11 +4,10 @@ import SidebarDropdown from '@/components/SidebarDropdown.vue'
 import { useAuthStore } from '@/features/auth/stores/auth_store'
 
 const authStore = useAuthStore()
-console.log(authStore.tokenContent)
 </script>
 
 <template>
-  <div class="flex w-64 h-screen flex-col justify-between border-e bg-white">
+  <aside class="flex w-64 h-screen flex-col justify-between border-e bg-white">
     <div class="px-4 py-6">
       <RouterLink :to="{ name: 'Home' }" class="block w-10">
         <img src="/logo.jpg" class="object-cover rounded-lg" alt="Logo" />
@@ -16,6 +15,7 @@ console.log(authStore.tokenContent)
 
       <ul class="mt-6 space-y-2">
         <SidebarLink :to="{ name: 'Home' }" :active="true">Home</SidebarLink>
+        <SidebarLink :to="{ name: 'Cities' }" :active="true">Cities</SidebarLink>
 
         <SidebarDropdown :active="false">
           <template #button-content>
@@ -46,5 +46,5 @@ console.log(authStore.tokenContent)
         </div>
       </a>
     </div>
-  </div>
+  </aside>
 </template>

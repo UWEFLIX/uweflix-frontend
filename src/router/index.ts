@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '@/features/home/views/HomeView.vue'
 import LoginView from '@/features/auth/views/LoginView.vue'
 import { useAuthStore } from '@/features/auth/stores/auth_store'
+import CitiesView from '@/features/cities/CitiesView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,11 @@ const router = createRouter({
       path: '/login',
       name: 'Login',
       component: LoginView
+    },
+    {
+      path: '/cities',
+      name: 'Cities',
+      component: CitiesView
     }
   ]
 })
