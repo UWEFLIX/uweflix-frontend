@@ -10,9 +10,9 @@ console.log(authStore.tokenContent)
 <template>
   <div class="flex w-64 h-screen flex-col justify-between border-e bg-white">
     <div class="px-4 py-6">
-      <div class="w-10">
+      <RouterLink :to="{ name: 'Home' }" class="block w-10">
         <img src="/logo.jpg" class="object-cover rounded-lg" alt="Logo" />
-      </div>
+      </RouterLink>
 
       <ul class="mt-6 space-y-2">
         <SidebarLink :to="{ name: 'Home' }" :active="true">Home</SidebarLink>
