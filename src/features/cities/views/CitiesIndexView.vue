@@ -2,10 +2,17 @@
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { useCityStore } from '@/features/cities/stores/city_store'
 
 const isLoading = ref(false)
 const cities = ref([])
+const cityStore = useCityStore()
+
+onMounted(async () => {
+  cities.value = await cityStore.getCities();
+  console.log(cities.value)
+})
 </script>
 
 <template>
@@ -54,9 +61,10 @@ const cities = ref([])
               </thead>
 
               <tbody
+                v-if="cities.length === 0"
                 class="divide-y divide-gray-200"
               >
-              <tr v-if="cities.length === 0">
+              <tr>
                   <td
                     colspan="5"
                     class="text-left px-6 py-4 text-base text-gray-700 transition-all"
@@ -71,7 +79,12 @@ const cities = ref([])
                     </div>
                   </td>
               </tr>
+              </tbody>
 
+              <tbody
+                v-else
+                class="divide-y divide-gray-200"
+              >
               <tr
                 v-for="city in cities"
                 class="hover:bg-primary-50 hover:shadow active:bg-primary-100 transition"

@@ -17,7 +17,7 @@ export default class AuthRepository implements IAuthRepository {
       {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          Accept: 'application/json'
+          'Accept': 'application/json'
         }
       }
     )
