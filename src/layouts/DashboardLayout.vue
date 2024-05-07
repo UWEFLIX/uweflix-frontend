@@ -92,11 +92,10 @@ const showingSidebar = ref(false)
                     <div
                       class="px-4 py-2 text-start text-sm"
                     >
-                      <!-- TODO: Get name from token content -->
                       <div
                         class="font-medium text-sm text-gray-800"
                       >
-                        Naffah Abdulla Rasheed
+                        {{ authStore?.tokenContent!['full_name'] }}
                       </div>
                       <div
                         class="font-medium text-xs text-gray-500"
@@ -109,9 +108,8 @@ const showingSidebar = ref(false)
                       class="h-px mt-2 bg-gray-200 border-0"
                     />
                     <DropdownLink
-                      href="/"
-                      method="get"
                       as="button"
+                      @click="authStore.logout()"
                     >
                       Log Out
                     </DropdownLink>

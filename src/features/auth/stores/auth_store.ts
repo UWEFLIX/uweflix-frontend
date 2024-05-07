@@ -20,6 +20,11 @@ export const useAuthStore = defineStore({
   actions: {
     async login(email: string, password: string) {
       this.token = await this.authRepository.getToken(email, password)
+    },
+
+    async logout() {
+      this.token = undefined
+      await this.router.push('/login')
     }
   }
 })
