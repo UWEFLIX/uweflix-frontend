@@ -2,15 +2,19 @@
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, type Ref, ref } from 'vue'
 import { useCityStore } from '@/features/cities/stores/city_store'
+import PrimaryButton from '@/components/PrimaryButton.vue'
+import CityForm from '@/features/cities/views/components/CityForm.vue'
 
 const isLoading = ref(false)
-const cities = ref([])
+const cities: Ref<Array<any>> = ref([])
 const cityStore = useCityStore()
+const selectedCity: Ref<any> = ref()
+const openingCityForm = ref(false)
 
 onMounted(async () => {
-  cities.value = await cityStore.getCities();
+  cities.value = await cityStore.getCities()
   console.log(cities.value)
 })
 </script>
@@ -30,6 +34,14 @@ onMounted(async () => {
               class="font-semibold text-lg sm:text-xl text-gray-900"
             >
               Cities
+            </div>
+
+            <div class="flex items-center gap-4">
+              <PrimaryButton
+                @click="openingCityForm = true"
+              >
+                New City
+              </PrimaryButton>
             </div>
           </div>
 
@@ -65,19 +77,19 @@ onMounted(async () => {
                 class="divide-y divide-gray-200"
               >
               <tr>
-                  <td
-                    colspan="5"
-                    class="text-left px-6 py-4 text-base text-gray-700 transition-all"
-                  >
-                    <!-- Loading indicator -->
-                    <div v-if="isLoading" class="p-2">
-                      <div class="dot-pulse"></div>
-                    </div>
+                <td
+                  colspan="5"
+                  class="text-left px-6 py-4 text-base text-gray-700 transition-all"
+                >
+                  <!-- Loading indicator -->
+                  <div v-if="isLoading" class="p-2">
+                    <div class="dot-pulse"></div>
+                  </div>
 
-                    <div v-else>
-                      Please search for an item.
-                    </div>
-                  </td>
+                  <div v-else>
+                    Please search for an item.
+                  </div>
+                </td>
               </tr>
               </tbody>
 
@@ -87,6 +99,7 @@ onMounted(async () => {
               >
               <tr
                 v-for="city in cities"
+                :key="city.id"
                 class="hover:bg-primary-50 hover:shadow active:bg-primary-100 transition"
               >
                 <td
@@ -112,5 +125,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <CityForm :city="selectedCity" :open="openingCityForm" @close="openingCityForm = false" />
   </DashboardLayout>
 </template>
