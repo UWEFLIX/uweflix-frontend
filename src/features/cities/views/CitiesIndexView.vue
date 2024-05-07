@@ -9,11 +9,11 @@ import { useRouter } from 'vue-router'
 import type City from '@/features/cities/models/city'
 import LoadingIndicator from '@/components/LoadingIndicator.vue'
 
+const router = useRouter()
+const cityStore = useCityStore()
+
 const isLoading = ref(false)
 const cities: Ref<City[]> = ref([])
-
-const cityStore = useCityStore()
-const router = useRouter()
 
 onMounted(async () => {
   isLoading.value = true
