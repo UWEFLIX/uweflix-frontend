@@ -1,9 +1,10 @@
 import axios from 'axios'
+import type City from '@/features/cities/models/city'
 
 const baseURL = import.meta.env.VITE_API_ENDPOINT
 
 interface ICityRepository {
-  getCities(token: string): Promise<Array<any>>
+  getCities(token: string): Promise<City[]>
 }
 
 export default class CityRepository implements ICityRepository {
@@ -19,6 +20,6 @@ export default class CityRepository implements ICityRepository {
       }
     )
 
-    return res.data
+    return res.data as City[]
   }
 }

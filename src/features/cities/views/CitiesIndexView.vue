@@ -6,16 +6,19 @@ import { onMounted, type Ref, ref } from 'vue'
 import { useCityStore } from '@/features/cities/stores/city_store'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import { useRouter } from 'vue-router'
+import type City from '@/features/cities/models/city'
+import LoadingIndicator from '@/components/LoadingIndicator.vue'
 
 const isLoading = ref(false)
-const cities: Ref<Array<any>> = ref([])
+const cities: Ref<City[]> = ref([])
 
 const cityStore = useCityStore()
 const router = useRouter()
 
 onMounted(async () => {
+  isLoading.value = true
   cities.value = await cityStore.getCities()
-  console.log(cities.value)
+  isLoading.value = false
 })
 </script>
 
@@ -81,7 +84,7 @@ onMounted(async () => {
                 >
                   <!-- Loading indicator -->
                   <div v-if="isLoading" class="p-2">
-                    <div class="dot-pulse"></div>
+                    <LoadingIndicator />
                   </div>
 
                   <div v-else>
