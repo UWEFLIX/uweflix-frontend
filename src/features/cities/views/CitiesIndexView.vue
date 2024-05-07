@@ -5,13 +5,13 @@ import SecondaryButton from '@/components/SecondaryButton.vue'
 import { onMounted, type Ref, ref } from 'vue'
 import { useCityStore } from '@/features/cities/stores/city_store'
 import PrimaryButton from '@/components/PrimaryButton.vue'
-import CityForm from '@/features/cities/views/components/CityForm.vue'
+import { useRouter } from 'vue-router'
 
 const isLoading = ref(false)
 const cities: Ref<Array<any>> = ref([])
+
 const cityStore = useCityStore()
-const selectedCity: Ref<any> = ref()
-const openingCityForm = ref(false)
+const router = useRouter()
 
 onMounted(async () => {
   cities.value = await cityStore.getCities()
@@ -37,9 +37,7 @@ onMounted(async () => {
             </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton
-                @click="openingCityForm = true"
-              >
+              <PrimaryButton @click="router.push({ name: 'New City' })">
                 New City
               </PrimaryButton>
             </div>
@@ -87,7 +85,7 @@ onMounted(async () => {
                   </div>
 
                   <div v-else>
-                    Please search for an item.
+                    No cities found
                   </div>
                 </td>
               </tr>
@@ -125,7 +123,5 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-
-    <CityForm :city="selectedCity" :open="openingCityForm" @close="openingCityForm = false" />
   </DashboardLayout>
 </template>

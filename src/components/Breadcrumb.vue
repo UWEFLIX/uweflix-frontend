@@ -2,7 +2,7 @@
 defineProps<{
   title: string,
   icon: string,
-  to?: string | undefined
+  to?: Object | undefined
 }>();
 </script>
 

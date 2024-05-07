@@ -1,0 +1,79 @@
+<script setup lang="ts">
+import InputLabel from '@/components/InputLabel.vue'
+import TextInput from '@/components/TextInput.vue'
+import InputError from '@/components/InputError.vue'
+import DangerButton from '@/components/DangerButton.vue'
+import PrimaryButton from '@/components/PrimaryButton.vue'
+import SecondaryButton from '@/components/SecondaryButton.vue'
+import { ref } from 'vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue'
+import Breadcrumb from '@/components/Breadcrumb.vue'
+import { useRouter } from 'vue-router'
+
+defineProps<{
+  id: String | undefined
+}>()
+
+const router = useRouter()
+const city = ref(undefined)
+
+const form = ref({
+  name: ''
+})
+</script>
+
+<template>
+  <DashboardLayout>
+    <template #breadcrumbs>
+      <Breadcrumb title="Cities" icon="bi-building" :to="{ name: 'Cities' }" />
+      <Breadcrumb v-if="!city" title="New" icon="bi-chevron-right" />
+      <Breadcrumb v-else :title="`Edit #${city.id}`" icon="bi-chevron-right" />
+    </template>
+
+    <div class="py-12">
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white shadow-sm sm:rounded-lg">
+          <!-- Header -->
+          <div class="flex items-center justify-between p-6">
+            <div
+              class="font-semibold text-lg sm:text-xl text-gray-900"
+            >
+              Cities
+            </div>
+          </div>
+
+          <hr class="h-px bg-gray-200 border-0" />
+
+          <form @submit.prevent="">
+            <div class="p-6">
+
+              <div class="mb-4">
+                <InputLabel for="name" value="Name" class="mb-1" />
+                <TextInput
+                  v-model="form.name"
+                  id="name"
+                  class="w-full"
+                />
+                <InputError class="mt-2" message="" />
+              </div>
+            </div>
+
+            <div class="flex items-center justify-end p-6 gap-4 border-t">
+              <DangerButton v-if="city">
+                Delete
+              </DangerButton>
+
+              <SecondaryButton @click="router.push({ name: 'Cities' })">
+                Cancel
+              </SecondaryButton>
+
+              <PrimaryButton>
+                {{ city ? 'Update' : 'Add' }}
+              </PrimaryButton>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </DashboardLayout>
+</template>
