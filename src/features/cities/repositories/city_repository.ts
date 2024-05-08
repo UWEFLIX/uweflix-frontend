@@ -6,7 +6,6 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT
 
 interface ICityRepository {
   getCities(token: string): Promise<City[]>
-  getCity(token: string, name: string): Promise<City>
   createCity(token: string, city: City): Promise<City>
 }
 
@@ -20,17 +19,6 @@ export default class CityRepository implements ICityRepository {
     )
 
     return res.data as City[]
-  }
-
-  async getCity(token: string, name: string): Promise<City> {
-    const res = await axios.get(
-      `${baseURL}/clubs/cities/city?city_name=${name}`,
-      {
-        headers: getApiHeaders(token)
-      }
-    )
-
-    return res.data as City
   }
 
   async createCity(token: string, city: City): Promise<City> {

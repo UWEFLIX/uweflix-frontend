@@ -21,7 +21,7 @@ async function submit() {
   isLoading.value = true
   try {
     await authStore.login(form.value.email, form.value.password)
-    await router.push({ name: 'Home' })
+    await router.push({ name: 'home.index' })
   } catch (e) {
     toast.error(e)
   }

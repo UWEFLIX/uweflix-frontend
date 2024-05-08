@@ -15,16 +15,16 @@ const showingSidebar = ref(false)
 <template>
   <div class="min-h-screen bg-gray-100">
     <Sidebar :show="showingSidebar" @close-sidebar="showingSidebar = false">
-      <RouterLink :to="{ name: 'Home' }" class="block w-10">
+      <RouterLink :to="{ name: 'home.index' }" class="block w-10">
         <img src="/logo.jpg" class="object-cover rounded-lg" alt="Logo" />
       </RouterLink>
 
       <ul class="mt-6 space-y-2">
-        <SidebarLink :to="{ name: 'Home' }">
+        <SidebarLink :to="{ name: 'home.index' }">
           <i class="bi bi-house text-lg me-3"></i>
           <span>Home</span>
         </SidebarLink>
-        <SidebarLink :to="{ name: 'Cities' }">
+        <SidebarLink :to="{ name: 'cities.index' }">
           <i class="bi bi-building text-lg me-3"></i>
           <span>Cities</span>
         </SidebarLink>
@@ -34,8 +34,8 @@ const showingSidebar = ref(false)
             Test dropdown
           </template>
           <template #dropdown-content>
-            <SidebarLink :to="{ name: 'Home' }">Test 1</SidebarLink>
-            <SidebarLink :to="{ name: 'Home' }">Test 2</SidebarLink>
+            <SidebarLink :to="{ name: 'home.index' }">Test 1</SidebarLink>
+            <SidebarLink :to="{ name: 'home.index' }">Test 2</SidebarLink>
           </template>
         </SidebarDropdown>
       </ul>

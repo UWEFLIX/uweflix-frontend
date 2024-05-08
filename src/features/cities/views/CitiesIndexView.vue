@@ -1,25 +1,35 @@
 <script setup lang="ts">
-import DashboardLayout from '@/layouts/DashboardLayout.vue'
-import Breadcrumb from '@/components/Breadcrumb.vue'
-import SecondaryButton from '@/components/SecondaryButton.vue'
-import { onMounted, type Ref, ref } from 'vue'
-import { useCityStore } from '@/features/cities/stores/city_store'
-import PrimaryButton from '@/components/PrimaryButton.vue'
-import { useRouter } from 'vue-router'
-import type City from '@/features/cities/models/city'
-import LoadingIndicator from '@/components/LoadingIndicator.vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
+import SecondaryButton from '@/components/SecondaryButton.vue';
+import { onMounted, type Ref, ref } from 'vue';
+import { useCityStore } from '@/features/cities/stores/city_store';
+import PrimaryButton from '@/components/PrimaryButton.vue';
+import type City from '@/features/cities/models/city';
+import LoadingIndicator from '@/components/LoadingIndicator.vue';
+import CityFormModal from '@/features/cities/views/components/CityFormModal.vue';
 
-const router = useRouter()
-const cityStore = useCityStore()
+const cityStore = useCityStore();
 
-const isLoading = ref(false)
-const cities: Ref<City[]> = ref([])
+const isLoading = ref(false);
+const isOpeningForm = ref(false);
+const cities: Ref<City[]> = ref([]);
+const selectedCity: Ref<City | undefined> = ref(undefined);
+
+async function listChanged() {
+  isOpeningForm.value = false;
+  cities.value = []
+
+  isLoading.value = true;
+  cities.value = await cityStore.getCities();
+  isLoading.value = false;
+}
 
 onMounted(async () => {
-  isLoading.value = true
-  cities.value = await cityStore.getCities()
-  isLoading.value = false
-})
+  isLoading.value = true;
+  cities.value = await cityStore.getCities();
+  isLoading.value = false;
+});
 </script>
 
 <template>
@@ -40,7 +50,7 @@ onMounted(async () => {
             </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton @click="router.push({ name: 'New City' })">
+              <PrimaryButton @click="selectedCity = undefined; isOpeningForm = true">
                 New City
               </PrimaryButton>
             </div>
@@ -115,7 +125,7 @@ onMounted(async () => {
                 </td>
                 <td class="whitespace-nowrap px-6 py-4">
                   <SecondaryButton
-                    @click="router.push({ name: 'Edit City', params: { name: city.name } })"
+                    @click="selectedCity = city; isOpeningForm = true"
                   >
                     Edit
                   </SecondaryButton>
@@ -127,5 +137,7 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <CityFormModal :city="selectedCity" :open="isOpeningForm" @close="isOpeningForm = false" @list-changed="listChanged" />
   </DashboardLayout>
 </template>
