@@ -74,6 +74,7 @@ async function submit() {
               v-model="form.name"
               id="name"
               class="w-full"
+              required
             />
             <InputError class="mt-2" message="" />
           </div>
