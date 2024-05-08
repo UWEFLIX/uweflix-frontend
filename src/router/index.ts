@@ -27,6 +27,12 @@ const router = createRouter({
       path: '/cities/new',
       name: 'New City',
       component: CityFormView
+    },
+    {
+      path: '/cities/:name',
+      name: 'Edit City',
+      component: CityFormView,
+      props: true
     }
   ]
 })

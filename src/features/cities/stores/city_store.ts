@@ -16,6 +16,11 @@ export const useCityStore = defineStore({
       return await this.cityRepository.getCities(authStore.token!)
     },
 
+    async getCity(name: string) {
+      const authStore = useAuthStore()
+      return await this.cityRepository.getCity(authStore.token!, name)
+    },
+
     async createCity(city: City) {
       const authStore = useAuthStore()
       return await this.cityRepository.createCity(authStore.token!, city)

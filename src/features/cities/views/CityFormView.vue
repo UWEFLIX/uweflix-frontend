@@ -5,7 +5,7 @@ import InputError from '@/components/InputError.vue'
 import DangerButton from '@/components/DangerButton.vue'
 import PrimaryButton from '@/components/PrimaryButton.vue'
 import SecondaryButton from '@/components/SecondaryButton.vue'
-import { type Ref, ref } from 'vue'
+import { onBeforeMount, type Ref, ref } from 'vue'
 import DashboardLayout from '@/layouts/DashboardLayout.vue'
 import Breadcrumb from '@/components/Breadcrumb.vue'
 import { useRouter } from 'vue-router'
@@ -13,14 +13,15 @@ import { useCityStore } from '@/features/cities/stores/city_store'
 import type City from '@/features/cities/models/city'
 import { useToast } from 'vue-toastification'
 
-defineProps<{
-  id: String | undefined
+const props = defineProps<{
+  name: string | undefined
 }>()
 
 const router = useRouter()
 const toast = useToast()
 const cityStore = useCityStore()
 
+const isLoading = ref(false)
 const city: Ref<City | undefined> = ref(undefined)
 
 const form: Ref<City> = ref({
@@ -42,6 +43,20 @@ async function submit() {
     toast.error(error)
   }
 }
+
+onBeforeMount(async () => {
+  isLoading.value = true
+  if (props.name) {
+    try {
+      city.value = await cityStore.getCity(props.name)
+      form.value = { ...city.value! }
+    } catch (error) {
+      console.error(error)
+      toast.error(error)
+    }
+  }
+  isLoading.value = false
+})
 </script>
 
 <template>
