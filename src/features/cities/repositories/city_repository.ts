@@ -7,6 +7,7 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT
 interface ICityRepository {
   getCities(token: string): Promise<City[]>
   createCity(token: string, city: City): Promise<City>
+  deleteCity(token: string, city: City): Promise<void>
 }
 
 export default class CityRepository implements ICityRepository {
@@ -31,5 +32,14 @@ export default class CityRepository implements ICityRepository {
     )
 
     return res.data as City
+  }
+
+  async deleteCity(token: string, city: City): Promise<void> {
+    await axios.delete(
+      `${baseURL}/clubs/cities/city?city_name=${city.name}`,
+      {
+        headers: getApiHeaders(token)
+      }
+    )
   }
 }

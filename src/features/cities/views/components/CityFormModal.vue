@@ -19,6 +19,7 @@ const props = defineProps<{
 
 const toast = useToast();
 const cityStore = useCityStore();
+const action = ref('post');
 
 const form: Ref<City> = ref({
   id: undefined,
@@ -37,10 +38,16 @@ watch(
 
 async function submit() {
   try {
-    if (props.city) {
-      // await cityStore.updateCity(city.value.id, form.value)
-    } else {
-      await cityStore.createCity(form.value);
+    switch (action.value) {
+      case 'post':
+        await cityStore.createCity(form.value);
+        break;
+      case 'patch':
+        // await cityStore.updateCity(form.value);
+        break;
+      case 'delete':
+        await cityStore.deleteCity(form.value);
+        break;
     }
 
     emit('list-changed');
@@ -73,7 +80,7 @@ async function submit() {
         </div>
 
         <div class="flex items-center justify-end p-6 gap-4 border-t">
-          <DangerButton v-if="city">
+          <DangerButton v-if="city" @click="action = 'delete'">
             Delete
           </DangerButton>
 
@@ -81,7 +88,7 @@ async function submit() {
             Cancel
           </SecondaryButton>
 
-          <PrimaryButton>
+          <PrimaryButton @click="action = city ? 'patch' : 'post'">
             {{ city ? 'Update' : 'Add' }}
           </PrimaryButton>
         </div>
