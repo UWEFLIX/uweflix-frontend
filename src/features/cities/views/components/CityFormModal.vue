@@ -43,7 +43,7 @@ async function submit() {
         await cityStore.createCity(form.value);
         break;
       case 'patch':
-        // await cityStore.updateCity(form.value);
+        await cityStore.updateCity(form.value);
         break;
       case 'delete':
         await cityStore.deleteCity(form.value);
