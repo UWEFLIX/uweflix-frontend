@@ -24,18 +24,23 @@ const showingSidebar = ref(false)
           <i class="bi bi-house text-lg me-3"></i>
           <span>Home</span>
         </SidebarLink>
-        <SidebarLink :to="{ name: 'cities.index' }">
-          <i class="bi bi-building text-lg me-3"></i>
-          <span>Cities</span>
-        </SidebarLink>
 
         <SidebarDropdown :active="true">
           <template #button-content>
-            Test dropdown
+            <i class="bi bi-person-gear text-lg me-3"></i>
+            <span>Users</span>
           </template>
+
           <template #dropdown-content>
-            <SidebarLink :to="{ name: 'home.index' }">Test 1</SidebarLink>
-            <SidebarLink :to="{ name: 'home.index' }">Test 2</SidebarLink>
+            <SidebarLink :to="{ name: 'cities.index' }">
+              <i class="bi bi-building text-lg me-3"></i>
+              <span>Cities</span>
+            </SidebarLink>
+
+            <SidebarLink :to="{ name: 'users.index' }">
+              <i class="bi bi-person text-lg me-3"></i>
+              <span>Users</span>
+            </SidebarLink>
           </template>
         </SidebarDropdown>
       </ul>
