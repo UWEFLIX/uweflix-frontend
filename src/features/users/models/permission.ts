@@ -1,4 +1,4 @@
 export default interface Permission {
-  id: number | undefined
+  id: number
   name: string
 }

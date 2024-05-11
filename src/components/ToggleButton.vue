@@ -31,9 +31,9 @@ const props = defineProps({
 
 const buttonTypeClasses = computed(() => {
   if (props.buttonType === 'solid') {
-    return 'text-white bg-primary-600 border-primary-600';
+    return 'text-white bg-primary-500 border-primary-500';
   } else if (props.buttonType === 'outline') {
-    return 'text-primary-600 border-primary-600 hover:bg-primary-50';
+    return 'text-primary-500 border-primary-500 hover:bg-primary-50';
   }
 
   return ''

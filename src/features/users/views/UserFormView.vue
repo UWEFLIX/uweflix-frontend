@@ -19,7 +19,7 @@ const isLoading = ref(false);
 const user: Ref<User | undefined> = ref(undefined);
 const action = ref('post');
 
-const form: Ref<User> = ref({
+const form: Ref<any> = ref({
   id: undefined,
   name: '',
   email: '',

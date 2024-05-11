@@ -16,19 +16,19 @@ export const useCityStore = defineStore({
       return await this.cityRepository.getCities(authStore.token!)
     },
 
-    async createCity(city: City) {
+    async createCity(form: any) {
       const authStore = useAuthStore()
-      return await this.cityRepository.createCity(authStore.token!, city)
+      return await this.cityRepository.createCity(authStore.token!, form)
     },
 
-    async updateCity(city: City) {
+    async updateCity(form: any) {
       const authStore = useAuthStore()
-      return await this.cityRepository.updateCity(authStore.token!, city)
+      return await this.cityRepository.updateCity(authStore.token!, form)
     },
 
-    async deleteCity(city: City) {
+    async deleteCity(form: any) {
       const authStore = useAuthStore()
-      return await this.cityRepository.deleteCity(authStore.token!, city)
+      return await this.cityRepository.deleteCity(authStore.token!, form)
     }
   }
 })
