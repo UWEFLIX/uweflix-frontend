@@ -5,25 +5,15 @@ import SecondaryButton from '@/components/SecondaryButton.vue';
 import { onMounted, type Ref, ref } from 'vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
-import UserFormModal from '@/features/users/views/components/UserFormModal.vue';
 import { useUserStore } from '@/features/users/stores/user_store';
 import type User from '@/features/users/models/user';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const userStore = useUserStore();
 
 const isLoading = ref(false);
-const isOpeningForm = ref(false);
 const users: Ref<User[]> = ref([]);
-const selectedUser: Ref<User | undefined> = ref(undefined);
-
-async function listChanged() {
-  isOpeningForm.value = false;
-  users.value = []
-
-  isLoading.value = true;
-  users.value = await userStore.getUsers();
-  isLoading.value = false;
-}
 
 onMounted(async () => {
   isLoading.value = true;
@@ -35,7 +25,7 @@ onMounted(async () => {
 <template>
   <DashboardLayout>
     <template #breadcrumbs>
-      <Breadcrumb title="Cities" icon="bi-building" />
+      <Breadcrumb title="Users" icon="bi-person" />
     </template>
 
     <div class="py-12">
@@ -50,8 +40,8 @@ onMounted(async () => {
             </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton @click="selectedUser = undefined; isOpeningForm = true">
-                New City
+              <PrimaryButton @click="router.push({ name: 'users.new' })">
+                New User
               </PrimaryButton>
             </div>
           </div>
@@ -145,7 +135,7 @@ onMounted(async () => {
                 </td>
                 <td class="whitespace-nowrap px-6 py-4">
                   <SecondaryButton
-                    @click="selectedUser = user; isOpeningForm = true"
+                    @click="router.push({ name: 'users.edit', params: { id: user.id } })"
                   >
                     Edit
                   </SecondaryButton>
@@ -157,7 +147,5 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-
-<!--    <UserFormModal :city="selectedCity" :open="isOpeningForm" @close="isOpeningForm = false" @list-changed="listChanged" />-->
   </DashboardLayout>
 </template>
