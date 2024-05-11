@@ -12,7 +12,11 @@ import TextInput from '@/components/TextInput.vue';
 import DangerButton from '@/components/DangerButton.vue';
 import ToggleButton from '@/components/ToggleButton.vue';
 import type Role from '@/features/users/models/role';
+import { useToast } from 'vue-toastification';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
+const toast = useToast();
 const userStore = useUserStore();
 
 const isLoading = ref(false);
@@ -20,12 +24,12 @@ const user: Ref<User | undefined> = ref(undefined);
 const action = ref('post');
 
 const form: Ref<any> = ref({
-  id: undefined,
+  id: 0,
   name: '',
   email: '',
   password: '',
   roles: [],
-  status: undefined
+  status: '',
 });
 
 function handleToggle(role: Role) {
@@ -34,6 +38,27 @@ function handleToggle(role: Role) {
     form.value.roles.splice(index, 1);
   } else {
     form.value.roles?.push(role);
+  }
+}
+
+async function submit() {
+  try {
+    switch (action.value) {
+      case 'post':
+        await userStore.createUser(form.value);
+        break;
+      case 'patch':
+        // await userStore.updateCity(form.value);
+        break;
+      case 'delete':
+        // await userStore.deleteCity(form.value);
+        break;
+    }
+
+    await router.push({ name: 'users.index' });
+  } catch (error) {
+    console.error(error);
+    toast.error(error);
   }
 }
 
@@ -66,7 +91,7 @@ onBeforeMount(() => {
           <hr class="h-px bg-gray-200 border-0" />
 
           <!-- Form -->
-          <form @submit.prevent="">
+          <form @submit.prevent="submit">
             <div class="p-6">
 
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4">

@@ -8,7 +8,7 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT
 interface IUserRepository {
   getUsers(token: string): Promise<User[]>
   getRoles(token: string): Promise<Role[]>
-  // createCity(token: string, city: City): Promise<City>
+  createUser(token: string, form: any): Promise<User>
   // updateCity(token: string, city: City): Promise<City>
   // deleteCity(token: string, city: City): Promise<void>
 }
@@ -34,5 +34,17 @@ export default class UserRepository implements IUserRepository {
     )
 
     return res.data as Role[]
+  }
+
+  async createUser(token: string, form: any): Promise<User> {
+    const res = await axios.post(
+      `${baseURL}/users/user`,
+      form,
+      {
+        headers: getApiHeaders(token)
+      }
+    )
+
+    return res.data as User
   }
 }

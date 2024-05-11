@@ -23,11 +23,11 @@ export const useUserStore = defineStore({
       return this.roles
     },
 
-    // async createCity(city: City) {
-    //   const authStore = useAuthStore()
-    //   return await this.cityRepository.createCity(authStore.token!, city)
-    // },
-    //
+    async createUser(form: any) {
+      const authStore = useAuthStore()
+      return await this.userRepository.createUser(authStore.token!, form)
+    },
+
     // async updateCity(city: City) {
     //   const authStore = useAuthStore()
     //   return await this.cityRepository.updateCity(authStore.token!, city)

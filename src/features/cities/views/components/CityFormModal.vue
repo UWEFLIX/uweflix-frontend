@@ -22,7 +22,7 @@ const cityStore = useCityStore();
 const action = ref('post');
 
 const form: Ref<any> = ref({
-  id: undefined,
+  id: 0,
   name: ''
 });
 
