@@ -50,6 +50,11 @@ const router = createRouter({
       path: '/clubs/new',
       name: 'clubs.new',
       component: ClubFormView
+    },
+    {
+      path: '/clubs/edit',
+      name: 'clubs.edit',
+      component: ClubFormView
     }
   ]
 })
