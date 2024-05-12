@@ -3,13 +3,14 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 
 const props = defineProps<{
-  to: Object
+  to: any
+  routeGroup: String[]
 }>()
 
 const router = useRouter()
 
 const isCurrentRoute = computed(() => {
-  return router.currentRoute.value.name === props.to.name
+  return props.routeGroup.some(route => router.currentRoute.value.name === route)
 })
 </script>
 

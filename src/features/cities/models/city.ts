@@ -1,4 +1,4 @@
 export default interface City {
-  id: number | undefined
+  id: number
   name: string
 }

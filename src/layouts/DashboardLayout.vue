@@ -10,6 +10,19 @@ import DropdownLink from '@/components/DropdownLink.vue'
 const authStore = useAuthStore()
 
 const showingSidebar = ref(false)
+
+const routeGroups: { [key: string]: string[] } = {
+  home: ['home.index'],
+  users: ['users.index', 'users.new', 'users.edit'],
+  cities: ['cities.index'],
+}
+
+function combineRoutes(keys: string[]): string[] {
+  return keys.reduce((combinedRoutes: string[], key: string) => {
+    const routes = routeGroups[key] || [];
+    return combinedRoutes.concat(routes);
+  }, []);
+}
 </script>
 
 <template>
@@ -20,22 +33,27 @@ const showingSidebar = ref(false)
       </RouterLink>
 
       <ul class="mt-6 space-y-2">
-        <SidebarLink :to="{ name: 'home.index' }">
+        <SidebarLink :to="{ name: 'home.index' }" :route-group="routeGroups.home">
           <i class="bi bi-house text-lg me-3"></i>
           <span>Home</span>
         </SidebarLink>
-        <SidebarLink :to="{ name: 'cities.index' }">
-          <i class="bi bi-building text-lg me-3"></i>
-          <span>Cities</span>
-        </SidebarLink>
 
-        <SidebarDropdown :active="true">
+        <SidebarDropdown :route-group="combineRoutes(['users', 'cities'])">
           <template #button-content>
-            Test dropdown
+            <i class="bi bi-people text-lg me-3"></i>
+            <span>Club Management</span>
           </template>
+
           <template #dropdown-content>
-            <SidebarLink :to="{ name: 'home.index' }">Test 1</SidebarLink>
-            <SidebarLink :to="{ name: 'home.index' }">Test 2</SidebarLink>
+            <SidebarLink :to="{ name: 'users.index' }" :route-group="routeGroups.users">
+              <i class="bi bi-person text-lg me-3"></i>
+              <span>Users</span>
+            </SidebarLink>
+
+            <SidebarLink :to="{ name: 'cities.index' }" :route-group="routeGroups.cities">
+              <i class="bi bi-building text-lg me-3"></i>
+              <span>Cities</span>
+            </SidebarLink>
           </template>
         </SidebarDropdown>
       </ul>

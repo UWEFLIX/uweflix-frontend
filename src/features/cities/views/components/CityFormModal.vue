@@ -21,8 +21,8 @@ const toast = useToast();
 const cityStore = useCityStore();
 const action = ref('post');
 
-const form: Ref<City> = ref({
-  id: undefined,
+const form: Ref<any> = ref({
+  id: 0,
   name: ''
 });
 
