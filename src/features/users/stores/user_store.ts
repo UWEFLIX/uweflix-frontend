@@ -17,6 +17,11 @@ export const useUserStore = defineStore({
       return await this.userRepository.getUsers(authStore.token!)
     },
 
+    async getUser(email: string) {
+      const authStore = useAuthStore()
+      return this.userRepository.getUser(authStore.token!, email)
+    },
+
     async getRoles() {
       const authStore = useAuthStore()
       this.roles = await this.userRepository.getRoles(authStore.token!)
@@ -28,14 +33,14 @@ export const useUserStore = defineStore({
       return await this.userRepository.createUser(authStore.token!, form)
     },
 
-    // async updateCity(city: City) {
+    async updateUser(form: any) {
+      const authStore = useAuthStore()
+      return await this.userRepository.updateUser(authStore.token!, form)
+    },
+
+    // async deleteUser(form: any) {
     //   const authStore = useAuthStore()
-    //   return await this.cityRepository.updateCity(authStore.token!, city)
-    // },
-    //
-    // async deleteCity(city: City) {
-    //   const authStore = useAuthStore()
-    //   return await this.cityRepository.deleteCity(authStore.token!, city)
+    //   return await this.userRepository.deleteUser(authStore.token!, form)
     // }
   }
 })

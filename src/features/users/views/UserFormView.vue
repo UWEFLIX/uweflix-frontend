@@ -32,12 +32,16 @@ const form: Ref<any> = ref({
   status: '',
 });
 
+function hasRole(role: Role) {
+  return form.value.roles?.some((formRole: Role) => formRole.id === role.id);
+}
+
 function handleToggle(role: Role) {
-  if (form.value.roles?.includes(role)) {
-    const index = form.value.roles.indexOf(role);
+  const index = form.value.roles.findIndex((formRole: Role) => formRole.id === role.id);
+  if (index !== -1) {
     form.value.roles.splice(index, 1);
   } else {
-    form.value.roles?.push(role);
+    form.value.roles.push(role);
   }
 }
 
@@ -48,10 +52,10 @@ async function submit() {
         await userStore.createUser(form.value);
         break;
       case 'patch':
-        // await userStore.updateCity(form.value);
+        await userStore.updateUser(form.value);
         break;
       case 'delete':
-        // await userStore.deleteCity(form.value);
+        // await userStore.deleteUser(form.value);
         break;
     }
 
@@ -62,9 +66,21 @@ async function submit() {
   }
 }
 
-onBeforeMount(() => {
+onBeforeMount(async () => {
   isLoading.value = true;
-  userStore.getRoles();
+  if (router.currentRoute.value.query.email) {
+    const existingUser = await userStore.getUser(router.currentRoute.value.query.email as string);
+    user.value = existingUser
+    form.value = {
+      id: existingUser.id,
+      name: existingUser.name,
+      email: existingUser.email,
+      password: '',
+      roles: existingUser.roles ?? [],
+      status: existingUser.status,
+    }
+  }
+  await userStore.getRoles();
   isLoading.value = false;
 });
 </script>
@@ -139,7 +155,7 @@ onBeforeMount(() => {
                     button-type="outline"
                     inactive-icon="bi-plus-lg"
                     active-icon="bi-check-lg"
-                    :is-active="form.roles?.includes(role)"
+                    :is-active="hasRole(role)"
                     @toggle-action="handleToggle(role)"
                   >
                     <span class="font-medium mr-1">

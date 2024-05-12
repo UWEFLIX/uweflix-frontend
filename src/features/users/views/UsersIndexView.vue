@@ -135,7 +135,7 @@ onMounted(async () => {
                 </td>
                 <td class="whitespace-nowrap px-6 py-4">
                   <SecondaryButton
-                    @click="router.push({ name: 'users.edit', params: { id: user.id } })"
+                    @click="router.push({ name: 'users.edit', query: { email: user.email } })"
                   >
                     Edit
                   </SecondaryButton>

@@ -7,10 +7,11 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT
 
 interface IUserRepository {
   getUsers(token: string): Promise<User[]>
+  getUser(token: string, email: string): Promise<User>
   getRoles(token: string): Promise<Role[]>
   createUser(token: string, form: any): Promise<User>
-  // updateCity(token: string, city: City): Promise<City>
-  // deleteCity(token: string, city: City): Promise<void>
+  updateUser(token: string, form: any): Promise<User>
+  // deleteUser(token: string, form: any): Promise<void>
 }
 
 export default class UserRepository implements IUserRepository {
@@ -23,6 +24,17 @@ export default class UserRepository implements IUserRepository {
     )
 
     return res.data as User[]
+  }
+
+  async getUser(token: string, email: string) {
+    const res = await axios.get(
+      `${baseURL}/users/user?email=${email}`,
+      {
+        headers: getApiHeaders(token)
+      }
+    )
+
+    return res.data as User
   }
 
   async getRoles(token: string) {
@@ -47,4 +59,25 @@ export default class UserRepository implements IUserRepository {
 
     return res.data as User
   }
+
+  async updateUser(token: string, form: any) {
+    const res = await axios.patch(
+      `${baseURL}/users/user`,
+      form,
+      {
+        headers: getApiHeaders(token)
+      }
+    )
+
+    return res.data as User
+  }
+
+  // async deleteUser(token: string, form: any) {
+  //   await axios.delete(
+  //     `${baseURL}/users/user?email=${form.email}`,
+  //     {
+  //       headers: getApiHeaders(token)
+  //     }
+  //   )
+  // }
 }

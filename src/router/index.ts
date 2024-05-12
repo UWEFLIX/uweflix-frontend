@@ -33,6 +33,11 @@ const router = createRouter({
       path: '/users/new',
       name: 'users.new',
       component: UserFormView
+    },
+    {
+      path: '/users/edit',
+      name: 'users.edit',
+      component: UserFormView
     }
   ]
 })
