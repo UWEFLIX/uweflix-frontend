@@ -46,9 +46,9 @@ function combineRoutes(keys: string[]): string[] {
           </template>
 
           <template #dropdown-content>
-            <SidebarLink :to="{ name: 'users.index' }" :route-group="routeGroups.users">
-              <i class="bi bi-person text-lg me-3"></i>
-              <span>Users</span>
+            <SidebarLink :to="{ name: 'clubs.index' }" :route-group="routeGroups.clubs">
+              <i class="bi bi-people text-lg me-3"></i>
+              <span>Clubs</span>
             </SidebarLink>
 
             <SidebarLink :to="{ name: 'cities.index' }" :route-group="routeGroups.cities">
@@ -56,9 +56,9 @@ function combineRoutes(keys: string[]): string[] {
               <span>Cities</span>
             </SidebarLink>
 
-            <SidebarLink :to="{ name: 'clubs.index' }" :route-group="routeGroups.clubs">
-              <i class="bi bi-people text-lg me-3"></i>
-              <span>Clubs</span>
+            <SidebarLink :to="{ name: 'users.index' }" :route-group="routeGroups.users">
+              <i class="bi bi-person text-lg me-3"></i>
+              <span>Users</span>
             </SidebarLink>
           </template>
         </SidebarDropdown>
