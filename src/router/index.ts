@@ -5,6 +5,7 @@ import { useAuthStore } from '@/features/auth/stores/auth_store'
 import CitiesIndexView from '@/features/cities/views/CitiesIndexView.vue'
 import UsersIndexView from '@/features/users/views/UsersIndexView.vue'
 import UserFormView from '@/features/users/views/UserFormView.vue';
+import ClubIndexView from '@/features/clubs/views/ClubIndexView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
       path: '/users/edit',
       name: 'users.edit',
       component: UserFormView
+    },
+    {
+      path: '/clubs',
+      name: 'clubs.index',
+      component: ClubIndexView
     }
   ]
 })
