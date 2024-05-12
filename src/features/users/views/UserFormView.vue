@@ -88,7 +88,7 @@ onBeforeMount(async () => {
 <template>
   <DashboardLayout>
     <template #breadcrumbs>
-      <Breadcrumb title="Users" icon="bi-person" />
+      <Breadcrumb title="Users" icon="bi-person" :to="{ name: 'users.index' }" />
       <Breadcrumb :title="user ? `Edit #${user.id}` : 'New'" icon="bi-chevron-right" />
     </template>
 
