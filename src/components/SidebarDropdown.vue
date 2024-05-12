@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { type Ref, ref } from 'vue';
 import { Collapse } from 'vue-collapsed';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
-  active: boolean;
+  routeGroup: String[];
 }>();
 
-const showingDropdown = ref(props.active);
+const router = useRouter()
+
+const showingDropdown: Ref<boolean> = ref(props.routeGroup.some(route => router.currentRoute.value.name === route));
 </script>
 
 <template>
