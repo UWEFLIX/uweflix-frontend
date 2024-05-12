@@ -25,7 +25,7 @@ onMounted(async () => {
 <template>
   <DashboardLayout>
     <template #breadcrumbs>
-      <Breadcrumb title="Users" icon="bi-person" />
+      <Breadcrumb title="Clubs" icon="bi-people" />
     </template>
 
     <div class="py-12">

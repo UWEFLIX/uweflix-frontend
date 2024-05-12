@@ -7,6 +7,7 @@ import router from './router'
 import './index.css'
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import type { Router } from 'vue-router'
+import './css/vue-multiselect.css'
 
 declare module 'pinia' {
   export interface PiniaCustomProperties {

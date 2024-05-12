@@ -31,7 +31,7 @@ defineExpose({ focus: () => input.value?.focus() })
 <template>
   <input
     type="number"
-    class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
+    class="p-2 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm"
     v-model="model"
     ref="input"
     :min="min"

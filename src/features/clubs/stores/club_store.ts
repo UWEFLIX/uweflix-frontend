@@ -11,7 +11,7 @@ export const useClubStore = defineStore({
 
   actions: {
     async getClubs() {
-      const authStore = useAuthStore()
+      const authStore= useAuthStore()
       return await this.clubRepository.getClubs(authStore.token!)
     },
 
@@ -21,12 +21,12 @@ export const useClubStore = defineStore({
     },
 
     async createClub(form: any) {
-      const authStore = useAuthStore()
+      const authStore= useAuthStore()
       return await this.clubRepository.createClub(authStore.token!, form)
     },
 
     async updateClub(form: any) {
-      const authStore = useAuthStore()
+      const authStore= useAuthStore()
       return await this.clubRepository.updateClub(authStore.token!, form)
     },
 
