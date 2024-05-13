@@ -8,11 +8,15 @@ import LoadingIndicator from '@/components/LoadingIndicator.vue';
 import { useRouter } from 'vue-router';
 import type Account from '../models/account';
 import { useAccountStore } from '../stores/account_store';
+import type Club from '../models/club';
+import { useClubStore } from '../stores/club_store';
 
 const router = useRouter();
+const clubStore = useClubStore();
 const accountStore = useAccountStore();
 
 const isLoading = ref(false);
+const club: Ref<Club | undefined> = ref(undefined);
 const accounts: Ref<Account[]> = ref([]);
 
 const clubAccounts = computed(() => {
@@ -21,7 +25,13 @@ const clubAccounts = computed(() => {
 
 onMounted(async () => {
   isLoading.value = true;
-  accounts.value = await accountStore.getAccounts();
+  if (router.currentRoute.value.query.club_name) {
+    const existingClub = await clubStore.getClub(
+      router.currentRoute.value.query.club_name as string
+    );
+    club.value = existingClub;
+    accounts.value = await accountStore.getClubAccounts(existingClub.id);
+  }
   isLoading.value = false;
 });
 </script>
@@ -29,7 +39,9 @@ onMounted(async () => {
 <template>
   <DashboardLayout>
     <template #breadcrumbs>
-      <Breadcrumb title="Accounts" icon="bi-person-vcard" />
+      <Breadcrumb title="Clubs" icon="bi-people" :to="{ name: 'clubs.index' }" />
+      <Breadcrumb :title="club ? club.club_name : 'Undefined'" icon="bi-chevron-right" />
+      <Breadcrumb title="Accounts" icon="bi-chevron-right" />
     </template>
 
     <div class="py-12">
@@ -37,10 +49,12 @@ onMounted(async () => {
         <div class="bg-white shadow-sm sm:rounded-lg">
           <!-- Header -->
           <div class="flex items-center justify-between p-6">
-            <div class="font-semibold text-lg sm:text-xl text-gray-900">Accounts</div>
+            <div class="font-semibold text-lg sm:text-xl text-gray-900">
+              {{ club ? `${club.club_name}'s Accounts` : 'Undefined' }}
+            </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton @click="router.push({ name: 'users.new' })">
+              <PrimaryButton v-if="club" @click="router.push({ name: 'accounts.new' })">
                 New Account
               </PrimaryButton>
             </div>
@@ -98,7 +112,13 @@ onMounted(async () => {
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton
                       @click="
-                        router.push({ name: 'accounts.edit', query: { account_id: account.id } })
+                        router.push({
+                          name: 'accounts.edit',
+                          query: {
+                            club_name: club?.club_name,
+                            account_id: account.id
+                          }
+                        })
                       "
                     >
                       Edit

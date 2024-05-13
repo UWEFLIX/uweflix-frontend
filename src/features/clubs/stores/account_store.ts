@@ -10,9 +10,9 @@ export const useAccountStore = defineStore({
   }),
 
   actions: {
-    async getAccounts() {
+    async getClubAccounts(club_id: number) {
       const authStore = useAuthStore();
-      return await this.accountRepository.getAccounts(authStore.token!);
+      return await this.accountRepository.getClubAccounts(authStore.token!, club_id);
     },
 
     async getAccount(id: number) {

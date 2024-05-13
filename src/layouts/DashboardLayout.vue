@@ -15,8 +15,7 @@ const routeGroups: { [key: string]: string[] } = {
   home: ['home.index'],
   users: ['users.index', 'users.new', 'users.edit'],
   cities: ['cities.index'],
-  clubs: ['clubs.index', 'clubs.new', 'clubs.edit'],
-  accounts: ['accounts.index', 'accounts.new', 'accounts.edit']
+  clubs: ['clubs.index', 'clubs.new', 'clubs.edit', 'clubs.accounts']
 };
 
 function combineRoutes(keys: string[]): string[] {
@@ -40,7 +39,7 @@ function combineRoutes(keys: string[]): string[] {
           <span>Home</span>
         </SidebarLink>
 
-        <SidebarDropdown :route-group="combineRoutes(['users', 'cities', 'clubs', 'accounts'])">
+        <SidebarDropdown :route-group="combineRoutes(['users', 'cities', 'clubs'])">
           <template #button-content>
             <i class="bi bi-people text-lg me-3"></i>
             <span>Club Management</span>
@@ -55,11 +54,6 @@ function combineRoutes(keys: string[]): string[] {
             <SidebarLink :to="{ name: 'users.index' }" :route-group="routeGroups.users">
               <i class="bi bi-person text-lg me-3"></i>
               <span>Users</span>
-            </SidebarLink>
-
-            <SidebarLink :to="{ name: 'accounts.index' }" :route-group="routeGroups.accounts">
-              <i class="bi bi-person-vcard text-lg me-3"></i>
-              <span>Accounts</span>
             </SidebarLink>
 
             <SidebarLink :to="{ name: 'cities.index' }" :route-group="routeGroups.cities">
