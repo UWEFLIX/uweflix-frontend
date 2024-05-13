@@ -145,6 +145,19 @@ onBeforeMount(async () => {
                     <InputError class="mt-2" message="" />
                   </div>
                 </div>
+
+                <div class="flex flex-row mb-4">
+                  <div class="flex-1">
+                    <InputLabel for="members" value="Members" class="mb-1" />
+                    <VueMultiselect
+                      v-model="form.members"
+                      :options="userOptions"
+                      :multiple="true"
+                      label="name"
+                      track-by="id" />
+                    <InputError class="mt-2" message="" />
+                  </div>
+                </div>
               </section>
 
               <hr class="h-px bg-gray-200 border-0 my-6 sm:my-8" />
