@@ -40,7 +40,7 @@ const router = createRouter({
       component: UserFormView
     },
     {
-      path: '/users/edit',
+      path: '/users/edit/:id',
       name: 'users.edit',
       component: UserFormView
     },
