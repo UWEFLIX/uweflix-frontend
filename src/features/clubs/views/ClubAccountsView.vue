@@ -113,7 +113,7 @@ onMounted(async () => {
                     <SecondaryButton
                       @click="
                         router.push({
-                          name: 'accounts.edit',
+                          name: 'accounts.details',
                           query: {
                             club_name: club?.club_name,
                             account_id: account.id
@@ -121,7 +121,7 @@ onMounted(async () => {
                         })
                       "
                     >
-                      Edit
+                      Details
                     </SecondaryButton>
                   </td>
                 </tr>

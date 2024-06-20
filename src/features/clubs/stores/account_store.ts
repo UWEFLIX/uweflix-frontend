@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { useAuthStore } from '@/features/auth/stores/auth_store';
 import AccountRepository from '../repositories/account_repository';
+import type Account from '@/features/clubs/models/account';
 
 export const useAccountStore = defineStore({
   id: 'accountStore',
@@ -10,22 +11,22 @@ export const useAccountStore = defineStore({
   }),
 
   actions: {
-    async getClubAccounts(club_id: number) {
+    async getClubAccounts(club_id: number): Promise<Account[]> {
       const authStore = useAuthStore();
       return await this.accountRepository.getClubAccounts(authStore.token!, club_id);
     },
 
-    async getAccount(id: number) {
+    async getAccount(id: number): Promise<Account> {
       const authStore = useAuthStore();
       return this.accountRepository.getAccount(authStore.token!, id);
     },
 
-    async createAccount(form: any) {
+    async createAccount(form: any): Promise<Account> {
       const authStore = useAuthStore();
       return await this.accountRepository.createAccount(authStore.token!, form);
     },
 
-    async updateAccount(form: any) {
+    async updateAccount(form: any): Promise<Account> {
       const authStore = useAuthStore();
       return await this.accountRepository.updateAccount(authStore.token!, form);
     }

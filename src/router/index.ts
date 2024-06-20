@@ -9,6 +9,7 @@ import ClubIndexView from '@/features/clubs/views/ClubIndexView.vue';
 import ClubFormView from '@/features/clubs/views/ClubFormView.vue';
 import AccountsIndexView from '@/features/clubs/views/ClubAccountsView.vue';
 import ClubAccountsView from '@/features/clubs/views/ClubAccountsView.vue';
+import AccountDetailsView from '@/features/clubs/views/AccountDetailsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,6 +63,11 @@ const router = createRouter({
       path: '/clubs/accounts',
       name: 'clubs.accounts',
       component: ClubAccountsView
+    },
+    {
+      path: '/accounts/details',
+      name: 'accounts.details',
+      component: AccountDetailsView
     }
   ]
 });

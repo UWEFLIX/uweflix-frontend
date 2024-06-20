@@ -13,7 +13,7 @@ interface IAccountRepository {
 }
 
 export default class AccountRepository implements IAccountRepository {
-  async getClubAccounts(token: string, club_id: number) {
+  async getClubAccounts(token: string, club_id: number): Promise<Account[]> {
     const res = await axios.get(
       `${baseURL}/accounts/club/accounts?club_id=${club_id}&start=1&limit=9999`,
       {
@@ -24,7 +24,7 @@ export default class AccountRepository implements IAccountRepository {
     return res.data as Account[];
   }
 
-  async getAccount(token: string, id: number) {
+  async getAccount(token: string, id: number): Promise<Account> {
     const res = await axios.get(`${baseURL}/accounts/account?account_id=${id}`, {
       headers: getApiHeaders(token)
     });
@@ -40,7 +40,7 @@ export default class AccountRepository implements IAccountRepository {
     return res.data as Account;
   }
 
-  async updateAccount(token: string, form: any) {
+  async updateAccount(token: string, form: any): Promise<Account> {
     const res = await axios.patch(`${baseURL}/accounts/account`, form, {
       headers: getApiHeaders(token)
     });
