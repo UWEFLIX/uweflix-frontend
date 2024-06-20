@@ -1,6 +1,6 @@
 import axios from 'axios';
 import getApiHeaders from '@/constants/api_headers';
-import type Account from '@/features/users/models/user';
+import type Account from '../models/account';
 
 const baseURL = import.meta.env.VITE_API_ENDPOINT;
 
