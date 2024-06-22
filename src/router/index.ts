@@ -7,7 +7,6 @@ import UsersIndexView from '@/features/users/views/UsersIndexView.vue';
 import UserFormView from '@/features/users/views/UserFormView.vue';
 import ClubIndexView from '@/features/clubs/views/ClubIndexView.vue';
 import ClubFormView from '@/features/clubs/views/ClubFormView.vue';
-import AccountsIndexView from '@/features/clubs/views/ClubAccountsView.vue';
 import ClubAccountsView from '@/features/clubs/views/ClubAccountsView.vue';
 import AccountDetailsView from '@/features/clubs/views/AccountDetailsView.vue';
 
@@ -65,7 +64,7 @@ const router = createRouter({
       component: ClubAccountsView
     },
     {
-      path: '/accounts/details',
+      path: '/accounts/:id/details',
       name: 'accounts.details',
       component: AccountDetailsView
     }

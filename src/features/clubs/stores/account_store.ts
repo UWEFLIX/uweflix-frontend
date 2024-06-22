@@ -16,7 +16,7 @@ export const useAccountStore = defineStore({
       return await this.accountRepository.getClubAccounts(authStore.token!, club_id);
     },
 
-    async getAccount(id: number): Promise<Account> {
+    async getAccount(id: string): Promise<Account> {
       const authStore = useAuthStore();
       return this.accountRepository.getAccount(authStore.token!, id);
     },

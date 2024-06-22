@@ -6,21 +6,26 @@ import router from '@/router';
 import { onMounted, ref, type Ref } from 'vue';
 import { useAccountStore } from '@/features/clubs/stores/account_store';
 import type Account from '@/features/clubs/models/account';
+import type Club from '../models/club';
+import { useClubStore } from '../stores/club_store';
 
 const accountStore = useAccountStore();
+const clubStore = useClubStore();
 
-const clubName: Ref<String | undefined> = ref(undefined);
+const isLoading = ref(false);
+const error = ref('');
+const club: Ref<Club | undefined> = ref(undefined);
 const account: Ref<Account | undefined> = ref(undefined);
 
 onMounted(async () => {
-  if (router.currentRoute.value.query.club_name) {
-    clubName.value = router.currentRoute.value.query.club_name as string;
+  isLoading.value = true;
+  const accountId = router.currentRoute.value.params.id as string;
+
+  if (accountId) {
+    account.value = await accountStore.getAccount(accountId);
+    club.value = await clubStore.getClub(String(account.value.entity_id));
   }
-  if (router.currentRoute.value.query.account_id) {
-    account.value = await accountStore.getAccount(
-      router.currentRoute.value.query.account_id as number
-    );
-  }
+  isLoading.value = false;
 });
 </script>
 
@@ -28,7 +33,7 @@ onMounted(async () => {
   <DashboardLayout>
     <template #breadcrumbs>
       <Breadcrumb title="Clubs" icon="bi-people" :to="{ name: 'clubs.index' }" />
-      <Breadcrumb :title="clubName || 'Undefined'" icon="bi-chevron-right" />
+      <Breadcrumb :title="club?.club_name || 'Undefined'" icon="bi-chevron-right" />
       <Breadcrumb title="Accounts" icon="bi-chevron-right" />
       <Breadcrumb :title="account ? account.name : 'Undefined'" icon="bi-chevron-right" />
     </template>

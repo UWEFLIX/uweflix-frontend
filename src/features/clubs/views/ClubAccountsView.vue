@@ -114,9 +114,8 @@ onMounted(async () => {
                       @click="
                         router.push({
                           name: 'accounts.details',
-                          query: {
-                            club_name: club?.club_name,
-                            account_id: account.id
+                          params: {
+                            id: account.id
                           }
                         })
                       "
