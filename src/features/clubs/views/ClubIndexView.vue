@@ -95,7 +95,7 @@ onMounted(async () => {
                   </td>
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton
-                      @click="router.push({ name: 'clubs.edit', query: { name: club.club_name } })"
+                      @click="router.push({ name: 'clubs.edit', params: { id: club.id } })"
                       class="mr-3"
                     >
                       Edit
@@ -105,7 +105,7 @@ onMounted(async () => {
                       @click="
                         router.push({
                           name: 'clubs.accounts',
-                          query: { club_name: club.club_name }
+                          params: { id: club.id }
                         })
                       "
                     >

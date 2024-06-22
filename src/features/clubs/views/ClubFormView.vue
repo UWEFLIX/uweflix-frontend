@@ -69,10 +69,11 @@ async function submit() {
 
 onBeforeMount(async () => {
   isLoading.value = true;
+  const clubId = router.currentRoute.value.params.id as string;
 
-  if (router.currentRoute.value.query.name) {
-    const existingClub = await clubStore.getClub(router.currentRoute.value.query.name as string);
-    club.value = existingClub
+  if (clubId) {
+    const existingClub = await clubStore.getClub(clubId);
+    club.value = existingClub;
     form.value = {
       id: existingClub.id,
       leader: existingClub.leader,
@@ -86,7 +87,7 @@ onBeforeMount(async () => {
       city: existingClub.city,
       status: existingClub.status,
       members: existingClub.members ?? null
-    }
+    };
   }
 
   userOptions.value = await userStore.getUsers();
@@ -108,9 +109,7 @@ onBeforeMount(async () => {
         <div class="bg-white shadow-sm sm:rounded-lg">
           <!-- Header -->
           <div class="flex items-center justify-between p-6">
-            <div
-              class="font-semibold text-lg sm:text-xl text-gray-900"
-            >
+            <div class="font-semibold text-lg sm:text-xl text-gray-900">
               {{ club ? 'Edit Club' : 'New Club' }}
             </div>
           </div>
@@ -126,12 +125,7 @@ onBeforeMount(async () => {
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4">
                   <div class="flex-1">
                     <InputLabel for="club_name" value="Name" class="mb-1" />
-                    <TextInput
-                      v-model="form.club_name"
-                      id="club_name"
-                      class="w-full"
-                      required
-                    />
+                    <TextInput v-model="form.club_name" id="club_name" class="w-full" required />
                     <InputError class="mt-2" message="" />
                   </div>
 
@@ -141,7 +135,8 @@ onBeforeMount(async () => {
                       v-model="form.leader"
                       :options="userOptions"
                       label="name"
-                      track-by="id" />
+                      track-by="id"
+                    />
                     <InputError class="mt-2" message="" />
                   </div>
                 </div>
@@ -154,7 +149,8 @@ onBeforeMount(async () => {
                       :options="userOptions"
                       :multiple="true"
                       label="name"
-                      track-by="id" />
+                      track-by="id"
+                    />
                     <InputError class="mt-2" message="" />
                   </div>
                 </div>
@@ -190,12 +186,7 @@ onBeforeMount(async () => {
 
                   <div class="flex-1">
                     <InputLabel for="post_code" value="Post Code" class="mb-1" />
-                    <NumberInput
-                      v-model="form.post_code"
-                      id="post_code"
-                      class="w-full"
-                      required
-                    />
+                    <NumberInput v-model="form.post_code" id="post_code" class="w-full" required />
                     <InputError class="mt-2" message="" />
                   </div>
 
@@ -205,7 +196,8 @@ onBeforeMount(async () => {
                       v-model="form.city"
                       :options="cityOptions"
                       label="name"
-                      track-by="id" />
+                      track-by="id"
+                    />
                     <InputError class="mt-2" message="" />
                   </div>
                 </div>
@@ -255,13 +247,9 @@ onBeforeMount(async () => {
             </div>
 
             <div class="flex items-center justify-end p-6 gap-4 border-t">
-              <DangerButton v-if="club" @click="action = 'delete'">
-                Delete
-              </DangerButton>
+              <DangerButton v-if="club" @click="action = 'delete'"> Delete </DangerButton>
 
-              <SecondaryButton @click="$emit('close')">
-                Cancel
-              </SecondaryButton>
+              <SecondaryButton @click="$emit('close')"> Cancel </SecondaryButton>
 
               <PrimaryButton @click="action = club ? 'patch' : 'post'">
                 {{ club ? 'Update' : 'Add' }}

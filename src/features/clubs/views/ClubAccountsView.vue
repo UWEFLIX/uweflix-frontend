@@ -25,10 +25,10 @@ const clubAccounts = computed(() => {
 
 onMounted(async () => {
   isLoading.value = true;
-  if (router.currentRoute.value.query.club_name) {
-    const existingClub = await clubStore.getClub(
-      router.currentRoute.value.query.club_name as string
-    );
+  const clubId = router.currentRoute.value.params.id as string;
+
+  if (clubId) {
+    const existingClub = await clubStore.getClub(clubId);
     club.value = existingClub;
     accounts.value = await accountStore.getClubAccounts(existingClub.id);
   }

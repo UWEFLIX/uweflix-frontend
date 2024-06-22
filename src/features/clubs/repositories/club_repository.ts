@@ -6,7 +6,7 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT;
 
 interface IClubRepository {
   getClubs(token: string): Promise<Club[]>;
-  getClub(token: string, email: string): Promise<Club>;
+  getClub(token: string, id: string): Promise<Club>;
   createClub(token: string, form: any): Promise<Club>;
   updateClub(token: string, form: any): Promise<Club>;
   // deleteUser(token: string, form: any): Promise<void>
@@ -21,8 +21,8 @@ export default class ClubRepository implements IClubRepository {
     return res.data as Club[];
   }
 
-  async getClub(token: string, name: string) {
-    const res = await axios.get(`${baseURL}/clubs/club?club_name=${name}`, {
+  async getClub(token: string, id: string) {
+    const res = await axios.get(`${baseURL}/clubs/club/id/${id}`, {
       headers: getApiHeaders(token)
     });
 
