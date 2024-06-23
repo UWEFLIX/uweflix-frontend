@@ -13,7 +13,6 @@ const accountStore = useAccountStore();
 const clubStore = useClubStore();
 
 const isLoading = ref(false);
-const error = ref('');
 const club: Ref<Club | undefined> = ref(undefined);
 const account: Ref<Account | undefined> = ref(undefined);
 
@@ -34,8 +33,12 @@ onMounted(async () => {
     <template #breadcrumbs>
       <Breadcrumb title="Clubs" icon="bi-people" :to="{ name: 'clubs.index' }" />
       <Breadcrumb :title="club?.club_name || 'Undefined'" icon="bi-chevron-right" />
-      <Breadcrumb title="Accounts" icon="bi-chevron-right" />
-      <Breadcrumb :title="account ? account.name : 'Undefined'" icon="bi-chevron-right" />
+      <Breadcrumb
+        title="Accounts"
+        icon="bi-chevron-right"
+        :to="{ name: 'clubs.accounts', params: { id: club?.id } }"
+      />
+      <Breadcrumb :title="account ? account.uid : 'Undefined'" icon="bi-chevron-right" />
     </template>
 
     <div class="py-12">
@@ -48,9 +51,47 @@ onMounted(async () => {
             </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton v-if="account" @click="router.push({ name: 'accounts.edit' })">
-                Edit
-              </PrimaryButton>
+              <PrimaryButton> Edit </PrimaryButton>
+            </div>
+          </div>
+
+          <hr class="h-px bg-gray-200 border-0" />
+
+          <div class="flex flex-row divide-x">
+            <div class="flex flex-1 flex-col p-6 text-lg gap-4">
+              <h3 class="text-gray-400">Details</h3>
+
+              <div class="inline-flex">
+                <div class="w-36 text-gray-500">UID:</div>
+                <div>{{ account?.uid }}</div>
+              </div>
+              <div class="inline-flex">
+                <div class="w-36 text-gray-500">Status:</div>
+                <div>{{ account?.status }}</div>
+              </div>
+              <div class="inline-flex">
+                <div class="w-36 text-gray-500">Entity type:</div>
+                <div>{{ account?.entity_type }}</div>
+              </div>
+              <div class="inline-flex">
+                <div class="w-36 text-gray-500">Club ID:</div>
+                <div>{{ club?.id }}</div>
+              </div>
+              <div class="inline-flex">
+                <div class="w-36 text-gray-500">Club Name:</div>
+                <div>{{ club?.club_name }}</div>
+              </div>
+              <div class="inline-flex">
+                <div class="w-36 text-gray-500">Balance:</div>
+                <div>{{ account?.balance.toFixed(2) }}</div>
+              </div>
+              <div class="inline-flex">
+                <div class="w-36 text-gray-500">Discount Rate:</div>
+                <div>{{ account?.discount_rate.toFixed(2) }}</div>
+              </div>
+            </div>
+            <div class="flex flex-1 flex-col p-6">
+              <h3 class="text-gray-400">Cards</h3>
             </div>
           </div>
         </div>
