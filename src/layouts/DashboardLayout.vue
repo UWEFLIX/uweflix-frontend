@@ -21,7 +21,8 @@ const routeGroups: { [key: string]: string[] } = {
     'clubs.edit',
     'clubs.accounts',
     'accounts.details',
-    'accounts.new'
+    'accounts.new',
+    'accounts.edit'
   ]
 };
 
