@@ -2,13 +2,14 @@
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
-import router from '@/router';
 import { onMounted, ref, type Ref } from 'vue';
 import { useAccountStore } from '@/features/clubs/stores/account_store';
 import type Account from '@/features/clubs/models/account';
 import type Club from '../models/club';
 import { useClubStore } from '../stores/club_store';
+import { useRouter } from 'vue-router';
 
+const router = useRouter();
 const accountStore = useAccountStore();
 const clubStore = useClubStore();
 
@@ -51,7 +52,16 @@ onMounted(async () => {
             </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton> Edit </PrimaryButton>
+              <PrimaryButton
+                @click="
+                  router.push({
+                    name: 'accounts.edit',
+                    params: { clubId: club?.id, accountId: account?.id }
+                  })
+                "
+              >
+                Edit
+              </PrimaryButton>
             </div>
           </div>
 

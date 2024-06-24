@@ -73,6 +73,11 @@ const router = createRouter({
       path: '/clubs/:clubId/accounts/new',
       name: 'accounts.new',
       component: AccountFormView
+    },
+    {
+      path: '/clubs/:clubId/accounts/:accountId/edit',
+      name: 'accounts.edit',
+      component: AccountFormView
     }
   ]
 });
