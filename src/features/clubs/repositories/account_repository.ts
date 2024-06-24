@@ -33,7 +33,7 @@ export default class AccountRepository implements IAccountRepository {
   }
 
   async createAccount(token: string, form: any): Promise<Account> {
-    const res = await axios.post(`${baseURL}/accounts/account`, form, {
+    const res = await axios.post(`${baseURL}/accounts/club/account`, form, {
       headers: getApiHeaders(token)
     });
 
@@ -41,7 +41,7 @@ export default class AccountRepository implements IAccountRepository {
   }
 
   async updateAccount(token: string, form: any): Promise<Account> {
-    const res = await axios.patch(`${baseURL}/accounts/account`, form, {
+    const res = await axios.patch(`${baseURL}/accounts/club/account`, form, {
       headers: getApiHeaders(token)
     });
 

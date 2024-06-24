@@ -26,9 +26,6 @@ export default class ClubRepository implements IClubRepository {
       headers: getApiHeaders(token)
     });
 
-    console.log(name);
-    console.log(res.data);
-
     return res.data as Club;
   }
 

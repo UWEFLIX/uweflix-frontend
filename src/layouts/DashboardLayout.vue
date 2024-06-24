@@ -15,7 +15,14 @@ const routeGroups: { [key: string]: string[] } = {
   home: ['home.index'],
   users: ['users.index', 'users.new', 'users.edit'],
   cities: ['cities.index'],
-  clubs: ['clubs.index', 'clubs.new', 'clubs.edit', 'clubs.accounts', 'accounts.details']
+  clubs: [
+    'clubs.index',
+    'clubs.new',
+    'clubs.edit',
+    'clubs.accounts',
+    'accounts.details',
+    'accounts.new'
+  ]
 };
 
 function combineRoutes(keys: string[]): string[] {

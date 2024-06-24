@@ -57,7 +57,7 @@ onMounted(async () => {
 
           <hr class="h-px bg-gray-200 border-0" />
 
-          <div class="flex flex-col xl:flex-row divide-y xl:divide-y-0 xl:divide-x">
+          <div class="flex flex-col xl:flex-row divide-dashed divide-y xl:divide-y-0 xl:divide-x">
             <div class="flex flex-1 flex-col p-6 text-lg gap-4">
               <h3 class="text-gray-400">Details</h3>
 

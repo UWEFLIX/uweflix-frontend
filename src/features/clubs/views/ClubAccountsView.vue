@@ -54,7 +54,10 @@ onMounted(async () => {
             </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton v-if="club" @click="router.push({ name: 'accounts.new' })">
+              <PrimaryButton
+                v-if="club"
+                @click="router.push({ name: 'accounts.new', params: { clubId: club.id } })"
+              >
                 New Account
               </PrimaryButton>
             </div>
