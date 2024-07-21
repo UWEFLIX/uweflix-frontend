@@ -13,7 +13,6 @@ import { useRouter } from 'vue-router';
 import type Film from '../models/film';
 import { useFilmStore } from '../stores/film_store';
 import NumberInput from '@/components/NumberInput.vue';
-import VueMultiselect from 'vue-multiselect';
 
 const router = useRouter();
 const toast = useToast();
@@ -50,7 +49,7 @@ async function submit() {
         await filmStore.createFilm(form.value);
         break;
       case 'patch':
-        await filmStore.createFilm(form.value);
+        await filmStore.updateFilm(form.value);
         break;
       case 'delete':
         // await userStore.deleteUser(form.value);
