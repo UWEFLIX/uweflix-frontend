@@ -12,8 +12,8 @@ import CityFormModal from '@/features/cities/views/components/CityFormModal.vue'
 const cityStore = useCityStore();
 
 const isLoading = ref(false);
-const isOpeningForm = ref(false);
 const cities: Ref<City[]> = ref([]);
+const isOpeningForm = ref(false);
 const selectedCity: Ref<City | undefined> = ref(undefined);
 
 async function listChanged() {

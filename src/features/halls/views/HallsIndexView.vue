@@ -5,15 +5,25 @@ import SecondaryButton from '@/components/SecondaryButton.vue';
 import { onMounted, type Ref, ref } from 'vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
-import { useRouter } from 'vue-router';
-import { useHallStore } from '../stores/city_store';
+import { useHallStore } from '../stores/hall_store';
 import type Hall from '../models/hall';
+import HallFormModal from './components/HallFormModal.vue';
 
-const router = useRouter();
 const hallStore = useHallStore();
 
 const isLoading = ref(false);
 const halls: Ref<Hall[]> = ref([]);
+const isOpeningForm = ref(false);
+const selectedHall: Ref<Hall | undefined> = ref(undefined);
+
+async function listChanged() {
+  isOpeningForm.value = false;
+  halls.value = [];
+
+  isLoading.value = true;
+  halls.value = await hallStore.getHalls();
+  isLoading.value = false;
+}
 
 onMounted(async () => {
   isLoading.value = true;
@@ -36,7 +46,14 @@ onMounted(async () => {
             <div class="font-semibold text-lg sm:text-xl text-gray-900">Halls</div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton @click="router.push({ name: 'halls.new' })"> New Hall </PrimaryButton>
+              <PrimaryButton
+                @click="
+                  selectedHall = undefined;
+                  isOpeningForm = true;
+                "
+              >
+                New Hall
+              </PrimaryButton>
             </div>
           </div>
 
@@ -91,10 +108,8 @@ onMounted(async () => {
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton
                       @click="
-                        router.push({
-                          name: 'halls.edit',
-                          params: { id: hall.id }
-                        })
+                        selectedHall = hall;
+                        isOpeningForm = true;
                       "
                     >
                       Edit
@@ -107,5 +122,12 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <HallFormModal
+      :hall="selectedHall"
+      :open="isOpeningForm"
+      @close="isOpeningForm = false"
+      @list-changed="listChanged"
+    />
   </DashboardLayout>
 </template>

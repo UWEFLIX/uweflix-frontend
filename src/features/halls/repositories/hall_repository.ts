@@ -21,7 +21,7 @@ export default class HallRepository implements IHallRepository {
   }
 
   async createHall(token: string, form: any): Promise<Hall> {
-    const res = await axios.post(`${baseURL}/films/hall/hall`, form, {
+    const res = await axios.post(`${baseURL}/films/halls/hall`, form, {
       headers: getApiHeaders(token)
     });
 
@@ -29,7 +29,7 @@ export default class HallRepository implements IHallRepository {
   }
 
   async updateHall(token: string, form: any): Promise<Hall> {
-    const res = await axios.patch(`${baseURL}/films/hall/hall`, form, {
+    const res = await axios.patch(`${baseURL}/films/halls/hall`, form, {
       headers: getApiHeaders(token)
     });
 
@@ -37,7 +37,7 @@ export default class HallRepository implements IHallRepository {
   }
 
   // async deleteHall(token: string, form: any): Promise<void> {
-  //   await axios.delete(`${baseURL}/films/hall/hall`, {
+  //   await axios.delete(`${baseURL}/films/halls/hall`, {
   //     headers: getApiHeaders(token)
   //   });
   // }
