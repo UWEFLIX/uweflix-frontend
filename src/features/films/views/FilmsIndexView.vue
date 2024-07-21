@@ -98,7 +98,9 @@ onMounted(async () => {
                 </div>
 
                 <div class="flex flex-row items-center gap-3">
-                  <SecondaryButton @click="router.push({ name: 'films.edit' })">
+                  <SecondaryButton
+                    @click="router.push({ name: 'films.edit', params: { id: film.id } })"
+                  >
                     Edit
                   </SecondaryButton>
                   <SecondaryButton> Schedules </SecondaryButton>

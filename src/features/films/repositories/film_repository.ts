@@ -22,7 +22,7 @@ export default class FilmRepository implements IFilmRepository {
   }
 
   async getFilm(token: string, id: string) {
-    const res = await axios.get(`${baseURL}/films/film/id/${id}`, {
+    const res = await axios.get(`${baseURL}/films/film/${id}`, {
       headers: getApiHeaders(token)
     });
 

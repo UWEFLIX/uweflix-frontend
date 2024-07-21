@@ -12,6 +12,7 @@ import AccountDetailsView from '@/features/clubs/views/AccountDetailsView.vue';
 import AccountFormView from '@/features/clubs/views/AccountFormView.vue';
 import HallsIndexView from '@/features/halls/views/HallsIndexView.vue';
 import FilmsIndexView from '@/features/films/views/FilmsIndexView.vue';
+import FilmFormView from '@/features/films/views/FilmFormView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -90,6 +91,16 @@ const router = createRouter({
       path: '/films',
       name: 'films.index',
       component: FilmsIndexView
+    },
+    {
+      path: '/films/new',
+      name: 'films.new',
+      component: FilmFormView
+    },
+    {
+      path: '/films/edit/:id',
+      name: 'films.edit',
+      component: FilmFormView
     }
   ]
 });
