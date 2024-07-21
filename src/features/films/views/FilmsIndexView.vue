@@ -8,6 +8,7 @@ import { useFilmStore } from '../stores/film_store';
 import type Film from '../models/film';
 import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
+import SecondaryButton from '@/components/SecondaryButton.vue';
 
 dayjs.extend(duration);
 
@@ -58,43 +59,54 @@ onMounted(async () => {
           </div>
 
           <article v-else class="flex flex-col divide-y">
-            <button
-              @click="router.push({ name: 'films.new' })"
+            <div
               v-for="film in films"
               :key="film.id"
-              class="flex flex-col items-start bg-white hover:bg-red-50 transition-all cursor-pointer p-4"
+              class="flex flex-col items-start bg-white hover:bg-red-50 transition-all p-4"
             >
-              <div class="flex flex-row items-center justify-start gap-2 mb-3">
-                <img
-                  src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRi6JrXEk7rAFUCN-4JkWBaqscN7NMelDtAUw&s"
-                  alt="Film Poster"
-                  class="w-18 h-24 object-cover rounded-lg"
-                />
+              <div class="w-full flex flex-wrap items-start justify-between mb-3">
+                <div class="flex flex-row items-center justify-start gap-3">
+                  <img
+                    :src="
+                      film.poster_image ??
+                      'https://img.freepik.com/premium-vector/photo-icon-picture-icon-image-sign-symbol-vector-illustration_64749-4409.jpg'
+                    "
+                    alt="Film Poster"
+                    class="w-20 h-24 object-cover rounded-lg"
+                  />
 
-                <div class="flex flex-col items-start">
-                  <div class="font-semibold text-gray-900 mb-1">
-                    {{ film.id }}. {{ film.title }}
+                  <div class="flex flex-col items-start">
+                    <div class="font-semibold text-gray-900 mb-1">
+                      {{ film.id }}. {{ film.title }}
+                    </div>
+                    <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-1">
+                      <span>{{ convertSecondsToHours(film.duration_sec) }}</span>
+                      <span>{{ film.age_rating }}</span>
+                      <span
+                        class="py-1 px-2 rounded-full text-xs"
+                        :class="[
+                          film.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                        ]"
+                        >{{ film.is_active ? 'Active' : 'Inactive' }}</span
+                      >
+                    </div>
+                    <div class="flex flex-wrap gap-4 text-sm text-gray-500">
+                      <span>From: {{ dayjs(film.on_air_from).format('DD/MM/YYYY') }}</span>
+                      <span>To: {{ dayjs(film.on_air_to).format('DD/MM/YYYY') }}</span>
+                    </div>
                   </div>
-                  <div class="flex flex-wrap items-center gap-4 text-sm text-gray-500 mb-1">
-                    <span>{{ convertSecondsToHours(film.duration_sec) }}</span>
-                    <span>{{ film.age_rating }}</span>
-                    <span
-                      class="py-1 px-2 rounded-full text-xs"
-                      :class="[
-                        film.is_active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-                      ]"
-                      >{{ film.is_active ? 'Active' : 'Inactive' }}</span
-                    >
-                  </div>
-                  <div class="flex flex-wrap gap-4 text-sm text-gray-500">
-                    <span>From: {{ dayjs(film.on_air_from).format('DD/MM/YYYY') }}</span>
-                    <span>To: {{ dayjs(film.on_air_to).format('DD/MM/YYYY') }}</span>
-                  </div>
+                </div>
+
+                <div class="flex flex-row items-center gap-3">
+                  <SecondaryButton @click="router.push({ name: 'films.edit' })">
+                    Edit
+                  </SecondaryButton>
+                  <SecondaryButton> Schedules </SecondaryButton>
                 </div>
               </div>
 
               <p class="text-sm">{{ film.trailer_desc }}</p>
-            </button>
+            </div>
           </article>
         </div>
       </div>
