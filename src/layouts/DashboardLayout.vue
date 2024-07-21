@@ -23,7 +23,8 @@ const routeGroups: { [key: string]: string[] } = {
     'accounts.details',
     'accounts.new',
     'accounts.edit'
-  ]
+  ],
+  halls: ['halls.index']
 };
 
 function combineRoutes(keys: string[]): string[] {
@@ -45,6 +46,11 @@ function combineRoutes(keys: string[]): string[] {
         <SidebarLink :to="{ name: 'home.index' }" :route-group="routeGroups.home">
           <i class="bi bi-house text-lg me-3"></i>
           <span>Home</span>
+        </SidebarLink>
+
+        <SidebarLink :to="{ name: 'halls.index' }" :route-group="routeGroups.halls">
+          <i class="bi bi-building text-lg me-3"></i>
+          <span>Halls</span>
         </SidebarLink>
 
         <SidebarDropdown :route-group="combineRoutes(['users', 'cities', 'clubs'])">
