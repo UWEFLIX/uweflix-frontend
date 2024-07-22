@@ -103,7 +103,11 @@ onMounted(async () => {
                   >
                     Edit
                   </SecondaryButton>
-                  <SecondaryButton> Schedules </SecondaryButton>
+                  <SecondaryButton
+                    @click="router.push({ name: 'films.schedules', params: { id: film.id } })"
+                  >
+                    Schedules
+                  </SecondaryButton>
                 </div>
               </div>
 
