@@ -25,6 +25,11 @@ export const useFilmStore = defineStore({
       return await this.filmRepository.createFilm(authStore.token!, form);
     },
 
+    async updateFilmPoster(filmId: number, file: File | undefined) {
+      const authStore = useAuthStore();
+      return await this.filmRepository.updateFilmPoster(authStore.token!, filmId, file);
+    },
+
     async updateFilm(form: any) {
       const authStore = useAuthStore();
       return await this.filmRepository.updateFilm(authStore.token!, form);

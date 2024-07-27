@@ -21,6 +21,7 @@ const filmStore = useFilmStore();
 const isLoading = ref(false);
 const film: Ref<Film | undefined> = ref(undefined);
 const action = ref('post');
+const fileUrl: Ref<string | null> = ref(null);
 const fromDate = ref();
 const toDate = ref();
 
@@ -33,20 +34,23 @@ const form: Ref<any> = ref({
   on_air_from: '',
   on_air_to: '',
   is_active: true,
-  poster_image: null,
   images: null,
   schedules: null,
   class_name: 'FILM'
 });
+
+const posterImage = ref(undefined);
 
 async function submit() {
   form.value.on_air_from = fromDate.value;
   form.value.on_air_to = toDate.value;
 
   try {
+    let newFilm: Film;
     switch (action.value) {
       case 'post':
-        await filmStore.createFilm(form.value);
+        newFilm = await filmStore.createFilm(form.value);
+        await filmStore.updateFilmPoster(newFilm.id, posterImage.value);
         break;
       case 'patch':
         await filmStore.updateFilm(form.value);
@@ -61,6 +65,12 @@ async function submit() {
     console.error(error);
     toast.error(error);
   }
+}
+
+function handleFileInput(event: any) {
+  const file = event.target.files[0];
+  posterImage.value = file;
+  fileUrl.value = URL.createObjectURL(file);
 }
 
 onBeforeMount(async () => {
@@ -100,6 +110,28 @@ onBeforeMount(async () => {
           <!-- Form -->
           <form @submit.prevent="submit">
             <div class="p-6">
+              <div class="mb-4 sm:mb-6">
+                <div class="flex flex-row items-center justify-start">
+                  <div class="w-fit">
+                    <label
+                      for="files"
+                      class="block mr-4 py-2 px-4 rounded-md border-0 text-sm font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition-colors"
+                    >
+                      Poster Image
+                    </label>
+                  </div>
+
+                  <img
+                    v-if="fileUrl !== null"
+                    :src="fileUrl"
+                    alt=""
+                    class="h-24 object-cover rounded-lg ml-6"
+                  />
+                </div>
+
+                <input id="files" class="hidden" type="file" @input="handleFileInput" />
+              </div>
+
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4 sm:mb-6">
                 <div class="flex-1">
                   <InputLabel for="title" value="Title" class="mb-1" />
@@ -179,6 +211,7 @@ onBeforeMount(async () => {
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
+  appearance: none; /* Add the standard property 'appearance' */
   background: transparent
     url("data:image/svg+xml;utf8,<svg fill='grey' height='28' viewBox='0 0 24 24' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")
     no-repeat;

@@ -8,6 +8,7 @@ interface IFilmRepository {
   getFilms(token: string): Promise<Film[]>;
   getFilm(token: string, id: string): Promise<Film>;
   createFilm(token: string, form: any): Promise<Film>;
+  updateFilmPoster(token: string, filmId: number, file: File): Promise<string>;
   updateFilm(token: string, form: any): Promise<Film>;
   // deleteUser(token: string, form: any): Promise<void>
 }
@@ -35,6 +36,25 @@ export default class FilmRepository implements IFilmRepository {
     });
 
     return res.data as Film;
+  }
+
+  async updateFilmPoster(token: string, filmId: number, file: File | undefined): Promise<string> {
+    console.log(file);
+    const res = await axios.patch(
+      `${baseURL}/films/images/poster/${filmId}`,
+      {
+        file: file
+      },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    return res.data as string;
   }
 
   async updateFilm(token: string, form: any) {
