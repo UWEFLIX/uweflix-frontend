@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import SecondaryButton from '@/components/SecondaryButton.vue';
 
+const baseURL = import.meta.env.VITE_API_ENDPOINT;
+
 dayjs.extend(duration);
 
 const router = useRouter();
@@ -67,10 +69,7 @@ onMounted(async () => {
               <div class="w-full flex flex-wrap items-start justify-between mb-3">
                 <div class="flex flex-row items-center justify-start gap-3">
                   <img
-                    :src="
-                      film.poster_image ??
-                      'https://img.freepik.com/premium-vector/photo-icon-picture-icon-image-sign-symbol-vector-illustration_64749-4409.jpg'
-                    "
+                    :src="`${baseURL}/films/images/image/${film.id}-poster.jpg`"
                     alt="Film Poster"
                     class="w-20 h-24 object-cover rounded-lg"
                   />

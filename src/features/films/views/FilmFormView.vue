@@ -15,6 +15,8 @@ import { useFilmStore } from '../stores/film_store';
 import NumberInput from '@/components/NumberInput.vue';
 import VueMultiselect from 'vue-multiselect';
 
+const baseURL = import.meta.env.VITE_API_ENDPOINT;
+
 const router = useRouter();
 const toast = useToast();
 const filmStore = useFilmStore();
@@ -40,7 +42,7 @@ const form: Ref<any> = ref({
   class_name: 'FILM'
 });
 
-const posterImage = ref(undefined);
+const posterImage: Ref<File | undefined> = ref(undefined);
 
 async function submit() {
   form.value.on_air_from = fromDate.value;
@@ -55,6 +57,7 @@ async function submit() {
         break;
       case 'patch':
         await filmStore.updateFilm(form.value);
+        await filmStore.updateFilmPoster(film.value?.id!, posterImage.value);
         break;
       case 'delete':
         // await userStore.deleteUser(form.value);
@@ -84,6 +87,15 @@ onBeforeMount(async () => {
     form.value = { ...existingFilm };
     toDate.value = new Date(existingFilm.on_air_to);
     fromDate.value = new Date(existingFilm.on_air_from);
+
+    const fileContentResponse = await fetch(`${baseURL}/films/images/image/${filmId}-poster.jpg`);
+    const fileBlob = await fileContentResponse.blob();
+    const file = new File([fileBlob], `${filmId}-poster.jpg`, {
+      type: 'image/jpeg'
+    });
+
+    posterImage.value = file;
+    fileUrl.value = URL.createObjectURL(file);
   }
   isLoading.value = false;
 });
