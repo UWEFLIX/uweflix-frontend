@@ -68,6 +68,7 @@ onMounted(async () => {
               <thead class="text-left uppercase">
                 <tr>
                   <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">ID</th>
+                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Hall Name</th>
                   <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Show Time</th>
                   <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">
                     Ticket Price
@@ -105,13 +106,24 @@ onMounted(async () => {
                     {{ schedule.id }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700">
+                    {{ schedule.hall.hall_name }}
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 text-gray-700">
                     {{ dayjs(schedule.show_time).format('DD/MM/YYYY HH:mm:ss') }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700">
                     {{ schedule.ticket_price.toFixed(2) }} GBP
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700">
-                    {{ schedule.on_schedule }}
+                  <td class="whitespace-nowrap px-6 py-4">
+                    <span
+                      class="py-1.5 px-3 rounded-full text-sm"
+                      :class="[
+                        schedule.on_schedule
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-red-100 text-red-700'
+                      ]"
+                      >{{ schedule.on_schedule ? 'Yes' : 'No' }}</span
+                    >
                   </td>
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton

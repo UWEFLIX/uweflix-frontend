@@ -18,7 +18,7 @@ export default class ScheduleRepository implements IScheduleRepository {
       headers: getApiHeaders(token)
     });
 
-    return res.data.schedules as Schedule[];
+    return res.data as Schedule[];
   }
 
   async getSchedule(token: string, id: string) {

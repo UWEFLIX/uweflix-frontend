@@ -1,3 +1,5 @@
+import type Hall from '@/features/halls/models/hall';
+
 export default interface Schedule {
   id: number;
   hall_id: number;
@@ -6,4 +8,5 @@ export default interface Schedule {
   on_schedule: boolean;
   ticket_price: number;
   class_name: string;
+  hall: Hall;
 }
