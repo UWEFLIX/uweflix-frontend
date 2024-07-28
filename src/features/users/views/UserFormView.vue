@@ -29,7 +29,7 @@ const form: Ref<any> = ref({
   email: '',
   password: '',
   roles: [],
-  status: '',
+  status: ''
 });
 
 function hasRole(role: Role) {
@@ -68,17 +68,19 @@ async function submit() {
 
 onBeforeMount(async () => {
   isLoading.value = true;
-  if (router.currentRoute.value.query.email) {
-    const existingUser = await userStore.getUser(router.currentRoute.value.query.email as string);
-    user.value = existingUser
+  const userId = router.currentRoute.value.params.id as string;
+
+  if (userId) {
+    const existingUser = await userStore.getUser(userId);
+    user.value = existingUser;
     form.value = {
       id: existingUser.id,
       name: existingUser.name,
       email: existingUser.email,
       password: '',
       roles: existingUser.roles ?? [],
-      status: existingUser.status,
-    }
+      status: existingUser.status
+    };
   }
   await userStore.getRoles();
   isLoading.value = false;
@@ -97,9 +99,7 @@ onBeforeMount(async () => {
         <div class="bg-white shadow-sm sm:rounded-lg">
           <!-- Header -->
           <div class="flex items-center justify-between p-6">
-            <div
-              class="font-semibold text-lg sm:text-xl text-gray-900"
-            >
+            <div class="font-semibold text-lg sm:text-xl text-gray-900">
               {{ user ? 'Edit User' : 'New User' }}
             </div>
           </div>
@@ -109,38 +109,22 @@ onBeforeMount(async () => {
           <!-- Form -->
           <form @submit.prevent="submit">
             <div class="p-6">
-
               <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-4">
                 <div class="flex-1">
                   <InputLabel for="name" value="Name" class="mb-1" />
-                  <TextInput
-                    v-model="form.name"
-                    id="name"
-                    class="w-full"
-                    required
-                  />
+                  <TextInput v-model="form.name" id="name" class="w-full" required />
                   <InputError class="mt-2" message="" />
                 </div>
 
                 <div class="flex-1">
                   <InputLabel for="email" value="Email" class="mb-1" />
-                  <TextInput
-                    v-model="form.email"
-                    id="email"
-                    class="w-full"
-                    required
-                  />
+                  <TextInput v-model="form.email" id="email" class="w-full" required />
                   <InputError class="mt-2" message="" />
                 </div>
 
                 <div v-if="!user" class="flex-1">
                   <InputLabel for="password" value="Password" class="mb-1" />
-                  <TextInput
-                    v-model="form.password"
-                    id="password"
-                    class="w-full"
-                    required
-                  />
+                  <TextInput v-model="form.password" id="password" class="w-full" required />
                   <InputError class="mt-2" message="" />
                 </div>
               </div>
@@ -159,7 +143,7 @@ onBeforeMount(async () => {
                     @toggle-action="handleToggle(role)"
                   >
                     <span class="font-medium mr-1">
-                        {{ role.name }}
+                      {{ role.name }}
                     </span>
                   </ToggleButton>
                 </div>
@@ -167,13 +151,9 @@ onBeforeMount(async () => {
             </div>
 
             <div class="flex items-center justify-end p-6 gap-4 border-t">
-              <DangerButton v-if="user" @click="action = 'delete'">
-                Delete
-              </DangerButton>
+              <DangerButton v-if="user" @click="action = 'delete'"> Delete </DangerButton>
 
-              <SecondaryButton @click="$emit('close')">
-                Cancel
-              </SecondaryButton>
+              <SecondaryButton @click="$emit('close')"> Cancel </SecondaryButton>
 
               <PrimaryButton @click="action = user ? 'patch' : 'post'">
                 {{ user ? 'Update' : 'Add' }}

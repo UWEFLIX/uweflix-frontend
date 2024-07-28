@@ -3,31 +3,31 @@ import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
 import SecondaryButton from '@/components/SecondaryButton.vue';
 import { onMounted, type Ref, ref } from 'vue';
-import { useCityStore } from '@/features/cities/stores/city_store';
 import PrimaryButton from '@/components/PrimaryButton.vue';
-import type City from '@/features/cities/models/city';
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
-import CityFormModal from '@/features/cities/views/components/CityFormModal.vue';
+import { useHallStore } from '../stores/hall_store';
+import type Hall from '../models/hall';
+import HallFormModal from './components/HallFormModal.vue';
 
-const cityStore = useCityStore();
+const hallStore = useHallStore();
 
 const isLoading = ref(false);
-const cities: Ref<City[]> = ref([]);
+const halls: Ref<Hall[]> = ref([]);
 const isOpeningForm = ref(false);
-const selectedCity: Ref<City | undefined> = ref(undefined);
+const selectedHall: Ref<Hall | undefined> = ref(undefined);
 
 async function listChanged() {
   isOpeningForm.value = false;
-  cities.value = [];
+  halls.value = [];
 
   isLoading.value = true;
-  cities.value = await cityStore.getCities();
+  halls.value = await hallStore.getHalls();
   isLoading.value = false;
 }
 
 onMounted(async () => {
   isLoading.value = true;
-  cities.value = await cityStore.getCities();
+  halls.value = await hallStore.getHalls();
   isLoading.value = false;
 });
 </script>
@@ -35,7 +35,7 @@ onMounted(async () => {
 <template>
   <DashboardLayout>
     <template #breadcrumbs>
-      <Breadcrumb title="Cities" icon="bi-buildings" />
+      <Breadcrumb title="Users" icon="bi-person" />
     </template>
 
     <div class="py-12">
@@ -43,16 +43,16 @@ onMounted(async () => {
         <div class="bg-white shadow-sm sm:rounded-lg">
           <!-- Header -->
           <div class="flex items-center justify-between p-6">
-            <div class="font-semibold text-lg sm:text-xl text-gray-900">Cities</div>
+            <div class="font-semibold text-lg sm:text-xl text-gray-900">Halls</div>
 
             <div class="flex items-center gap-4">
               <PrimaryButton
                 @click="
-                  selectedCity = undefined;
+                  selectedHall = undefined;
                   isOpeningForm = true;
                 "
               >
-                New City
+                New Hall
               </PrimaryButton>
             </div>
           </div>
@@ -66,11 +66,12 @@ onMounted(async () => {
                 <tr>
                   <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">ID</th>
                   <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Name</th>
-                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Actions</th>
+                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Seats/Row</th>
+                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">No. Rows</th>
                 </tr>
               </thead>
 
-              <tbody v-if="cities.length === 0" class="divide-y divide-gray-200">
+              <tbody v-if="halls.length === 0" class="divide-y divide-gray-200">
                 <tr>
                   <td
                     colspan="5"
@@ -81,27 +82,33 @@ onMounted(async () => {
                       <LoadingIndicator />
                     </div>
 
-                    <div v-else>No cities found</div>
+                    <div v-else>No halls found</div>
                   </td>
                 </tr>
               </tbody>
 
               <tbody v-else class="divide-y divide-gray-200">
                 <tr
-                  v-for="city in cities"
-                  :key="city.id"
+                  v-for="hall in halls"
+                  :key="hall.id"
                   class="hover:bg-primary-50 hover:shadow active:bg-primary-100 transition"
                 >
                   <td class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                    {{ city.id }}
+                    {{ hall.id }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700">
-                    {{ city.name }}
+                    {{ hall.hall_name }}
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 text-gray-700">
+                    {{ hall.seats_per_row }}
+                  </td>
+                  <td class="whitespace-nowrap px-6 py-4 text-gray-700">
+                    {{ hall.no_of_rows }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton
                       @click="
-                        selectedCity = city;
+                        selectedHall = hall;
                         isOpeningForm = true;
                       "
                     >
@@ -116,8 +123,8 @@ onMounted(async () => {
       </div>
     </div>
 
-    <CityFormModal
-      :city="selectedCity"
+    <HallFormModal
+      :hall="selectedHall"
       :open="isOpeningForm"
       @close="isOpeningForm = false"
       @list-changed="listChanged"

@@ -6,18 +6,29 @@ import { onMounted, type Ref, ref } from 'vue';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import LoadingIndicator from '@/components/LoadingIndicator.vue';
 import { useRouter } from 'vue-router';
-import { useClubStore } from '@/features/clubs/stores/club_store';
-import type Club from '@/features/clubs/models/club';
+import { useScheduleStore } from '../stores/schedule_store';
+import { useFilmStore } from '../stores/film_store';
+import type Film from '../models/film';
+import type Schedule from '../models/schedule';
+import dayjs from 'dayjs';
 
 const router = useRouter();
-const clubStore = useClubStore();
+const filmStore = useFilmStore();
+const scheduleStore = useScheduleStore();
 
 const isLoading = ref(false);
-const clubs: Ref<Club[]> = ref([]);
+const film: Ref<Film | undefined> = ref(undefined);
+const schedules: Ref<Schedule[]> = ref([]);
 
 onMounted(async () => {
   isLoading.value = true;
-  clubs.value = await clubStore.getClubs();
+  const filmId = router.currentRoute.value.params.id as string;
+
+  if (filmId) {
+    const existingFilm = await filmStore.getFilm(filmId);
+    film.value = existingFilm;
+    schedules.value = await scheduleStore.getSchedules(existingFilm.id);
+  }
   isLoading.value = false;
 });
 </script>
@@ -25,7 +36,9 @@ onMounted(async () => {
 <template>
   <DashboardLayout>
     <template #breadcrumbs>
-      <Breadcrumb title="Clubs" icon="bi-people" />
+      <Breadcrumb title="Films" icon="bi-film" :to="{ name: 'films.index' }" />
+      <Breadcrumb :title="film ? film.title : 'Undefined'" icon="bi-chevron-right" />
+      <Breadcrumb title="Schedules" icon="bi-chevron-right" />
     </template>
 
     <div class="py-12">
@@ -33,10 +46,17 @@ onMounted(async () => {
         <div class="bg-white shadow-sm sm:rounded-lg">
           <!-- Header -->
           <div class="flex items-center justify-between p-6">
-            <div class="font-semibold text-lg sm:text-xl text-gray-900">Clubs</div>
+            <div class="font-semibold text-lg sm:text-xl text-gray-900">
+              {{ film ? `${film.title}'s Schedules` : 'Undefined' }}
+            </div>
 
             <div class="flex items-center gap-4">
-              <PrimaryButton @click="router.push({ name: 'clubs.new' })"> New Club </PrimaryButton>
+              <PrimaryButton
+                v-if="film"
+                @click="router.push({ name: 'schedules.new', params: { filmId: film.id } })"
+              >
+                New Schedule
+              </PrimaryButton>
             </div>
           </div>
 
@@ -48,15 +68,19 @@ onMounted(async () => {
               <thead class="text-left uppercase">
                 <tr>
                   <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">ID</th>
-                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Name</th>
-                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Leader</th>
-                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Email</th>
-                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Status</th>
+                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Hall Name</th>
+                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Show Time</th>
+                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">
+                    Ticket Price
+                  </th>
+                  <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">
+                    On Schedule?
+                  </th>
                   <th class="whitespace-nowrap px-6 py-4 font-medium text-gray-500">Actions</th>
                 </tr>
               </thead>
 
-              <tbody v-if="clubs.length === 0" class="divide-y divide-gray-200">
+              <tbody v-if="schedules.length === 0" class="divide-y divide-gray-200">
                 <tr>
                   <td
                     colspan="5"
@@ -67,49 +91,52 @@ onMounted(async () => {
                       <LoadingIndicator />
                     </div>
 
-                    <div v-else>No clubs found</div>
+                    <div v-else>No schedules found</div>
                   </td>
                 </tr>
               </tbody>
 
               <tbody v-else class="divide-y divide-gray-200">
                 <tr
-                  v-for="club in clubs"
-                  :key="club.id"
+                  v-for="schedule in schedules"
+                  :key="schedule.id"
                   class="hover:bg-primary-50 hover:shadow active:bg-primary-100 transition"
                 >
                   <td class="whitespace-nowrap px-6 py-4 font-medium text-gray-900">
-                    {{ club.id }}
+                    {{ schedule.id }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700">
-                    {{ club.club_name }}
+                    {{ schedule.hall.hall_name }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700">
-                    {{ club.leader?.name ?? '-' }}
+                    {{ dayjs(schedule.show_time).format('DD/MM/YYYY HH:mm:ss') }}
                   </td>
                   <td class="whitespace-nowrap px-6 py-4 text-gray-700">
-                    {{ club.email }}
+                    {{ schedule.ticket_price.toFixed(2) }} GBP
                   </td>
-                  <td class="whitespace-nowrap px-6 py-4 text-gray-700">
-                    {{ club.status }}
+                  <td class="whitespace-nowrap px-6 py-4">
+                    <span
+                      class="py-1.5 px-3 rounded-full text-sm"
+                      :class="[
+                        schedule.on_schedule
+                          ? 'bg-green-100 text-green-700'
+                          : 'bg-red-100 text-red-700'
+                      ]"
+                      >{{ schedule.on_schedule ? 'Yes' : 'No' }}</span
+                    >
                   </td>
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton
-                      @click="router.push({ name: 'clubs.edit', params: { id: club.id } })"
-                      class="mr-3"
-                    >
-                      Edit
-                    </SecondaryButton>
-
-                    <SecondaryButton
                       @click="
                         router.push({
-                          name: 'clubs.accounts',
-                          params: { id: club.id }
+                          name: 'schedule.edit',
+                          params: {
+                            id: schedule.id
+                          }
                         })
                       "
                     >
-                      Accounts
+                      Edit
                     </SecondaryButton>
                   </td>
                 </tr>
