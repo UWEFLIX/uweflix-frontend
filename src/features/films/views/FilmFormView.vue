@@ -13,6 +13,7 @@ import { useRouter } from 'vue-router';
 import type Film from '../models/film';
 import { useFilmStore } from '../stores/film_store';
 import NumberInput from '@/components/NumberInput.vue';
+import VueMultiselect from 'vue-multiselect';
 
 const router = useRouter();
 const toast = useToast();
@@ -141,7 +142,7 @@ onBeforeMount(async () => {
 
                 <div class="flex-1">
                   <InputLabel for="age-rating" value="Age Rating" class="mb-1" />
-                  <TextInput v-model="form.age_rating" id="age-rating" class="w-full" required />
+                  <VueMultiselect v-model="form.age_rating" :options="['CHILD', 'ADULT']" />
                   <InputError class="mt-2" message="" />
                 </div>
 
