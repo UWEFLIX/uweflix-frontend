@@ -33,6 +33,11 @@ export const useFilmStore = defineStore({
     async updateFilm(form: any) {
       const authStore = useAuthStore();
       return await this.filmRepository.updateFilm(authStore.token!, form);
+    },
+
+    async uploadFilmImages(filmId: number, files: FileList | null) {
+      const authStore = useAuthStore();
+      return await this.filmRepository.uploadImages(authStore.token!, filmId, files);
     }
 
     // async deleteUser(form: any) {

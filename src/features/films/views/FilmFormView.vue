@@ -13,6 +13,10 @@ import { useRouter } from 'vue-router';
 import type Film from '../models/film';
 import { useFilmStore } from '../stores/film_store';
 import NumberInput from '@/components/NumberInput.vue';
+import VueMultiselect from 'vue-multiselect';
+import FilmImagesForm from './components/FilmImagesForm.vue';
+
+const baseURL = import.meta.env.VITE_API_ENDPOINT;
 
 const router = useRouter();
 const toast = useToast();
@@ -39,7 +43,7 @@ const form: Ref<any> = ref({
   class_name: 'FILM'
 });
 
-const posterImage = ref(undefined);
+const posterImage: Ref<File | undefined> = ref(undefined);
 
 async function submit() {
   form.value.on_air_from = fromDate.value;
@@ -54,6 +58,7 @@ async function submit() {
         break;
       case 'patch':
         await filmStore.updateFilm(form.value);
+        await filmStore.updateFilmPoster(film.value?.id!, posterImage.value);
         break;
       case 'delete':
         // await userStore.deleteUser(form.value);
@@ -83,6 +88,15 @@ onBeforeMount(async () => {
     form.value = { ...existingFilm };
     toDate.value = new Date(existingFilm.on_air_to);
     fromDate.value = new Date(existingFilm.on_air_from);
+
+    const fileContentResponse = await fetch(`${baseURL}/films/images/image/${filmId}-poster.jpg`);
+    const fileBlob = await fileContentResponse.blob();
+    const file = new File([fileBlob], `${filmId}-poster.jpg`, {
+      type: 'image/jpeg'
+    });
+
+    posterImage.value = file;
+    fileUrl.value = URL.createObjectURL(file);
   }
   isLoading.value = false;
 });
@@ -97,7 +111,7 @@ onBeforeMount(async () => {
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white shadow-sm sm:rounded-lg">
+        <div class="bg-white shadow-sm sm:rounded-lg sm:mb-6 lg:mb-8">
           <!-- Header -->
           <div class="flex items-center justify-between p-6">
             <div class="font-semibold text-lg sm:text-xl text-gray-900">
@@ -141,7 +155,7 @@ onBeforeMount(async () => {
 
                 <div class="flex-1">
                   <InputLabel for="age-rating" value="Age Rating" class="mb-1" />
-                  <TextInput v-model="form.age_rating" id="age-rating" class="w-full" required />
+                  <VueMultiselect v-model="form.age_rating" :options="['CHILD', 'ADULT']" />
                   <InputError class="mt-2" message="" />
                 </div>
 
@@ -202,6 +216,8 @@ onBeforeMount(async () => {
             </div>
           </form>
         </div>
+
+        <FilmImagesForm v-if="film" :film="film" />
       </div>
     </div>
   </DashboardLayout>

@@ -8,7 +8,7 @@ export default interface Film {
   on_air_to: string;
   is_active: boolean;
   poster_image: string | null;
-  images: string[] | null;
+  images: any[] | null;
   schedules: null;
   class_name: string;
 }
