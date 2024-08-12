@@ -38,7 +38,7 @@ export default class ClubRepository implements IClubRepository {
   }
 
   async updateClub(token: string, form: any) {
-    const res = await axios.patch(`${baseURL}/clubs/club`, form, {
+    const res = await axios.patch(`${baseURL}/clubs/admin/club`, form, {
       headers: getApiHeaders(token)
     });
 
