@@ -10,6 +10,7 @@ interface IFilmRepository {
   createFilm(token: string, form: any): Promise<Film>;
   updateFilmPoster(token: string, filmId: number, file: File): Promise<string>;
   updateFilm(token: string, form: any): Promise<Film>;
+  uploadImages(token: string, filmId: number, files: FileList | null): Promise<void>;
   // deleteUser(token: string, form: any): Promise<void>
 }
 
@@ -27,7 +28,17 @@ export default class FilmRepository implements IFilmRepository {
       headers: getApiHeaders(token)
     });
 
-    return res.data as Film;
+    const images = res.data.images.map((image: any) => {
+      return {
+        id: image.id,
+        url: `${baseURL}/films/images/image/${image.filename}`
+      };
+    });
+
+    const film = res.data as Film;
+    film.images = images;
+
+    return film;
   }
 
   async createFilm(token: string, form: any) {
@@ -39,7 +50,6 @@ export default class FilmRepository implements IFilmRepository {
   }
 
   async updateFilmPoster(token: string, filmId: number, file: File | undefined): Promise<string> {
-    console.log(file);
     const res = await axios.patch(
       `${baseURL}/films/images/poster/${filmId}`,
       {
@@ -63,6 +73,22 @@ export default class FilmRepository implements IFilmRepository {
     });
 
     return res.data as Film;
+  }
+
+  async uploadImages(token: string, filmId: number, files: FileList | null): Promise<void> {
+    await axios.patch(
+      `${baseURL}/films/images/posters/${filmId}`,
+      {
+        files: files
+      },
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Accept: 'application/json',
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
   }
 
   // async deleteUser(token: string, form: any) {

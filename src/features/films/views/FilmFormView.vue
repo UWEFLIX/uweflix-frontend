@@ -14,6 +14,7 @@ import type Film from '../models/film';
 import { useFilmStore } from '../stores/film_store';
 import NumberInput from '@/components/NumberInput.vue';
 import VueMultiselect from 'vue-multiselect';
+import FilmImagesForm from './components/FilmImagesForm.vue';
 
 const baseURL = import.meta.env.VITE_API_ENDPOINT;
 
@@ -110,7 +111,7 @@ onBeforeMount(async () => {
 
     <div class="py-12">
       <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white shadow-sm sm:rounded-lg">
+        <div class="bg-white shadow-sm sm:rounded-lg sm:mb-6 lg:mb-8">
           <!-- Header -->
           <div class="flex items-center justify-between p-6">
             <div class="font-semibold text-lg sm:text-xl text-gray-900">
@@ -215,6 +216,8 @@ onBeforeMount(async () => {
             </div>
           </form>
         </div>
+
+        <FilmImagesForm v-if="film" :film="film" />
       </div>
     </div>
   </DashboardLayout>
