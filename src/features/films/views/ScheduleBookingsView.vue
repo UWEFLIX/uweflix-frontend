@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import { onBeforeMount, onMounted, type Ref, ref } from 'vue';
+import { onBeforeMount, type Ref, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFilmStore } from '@/features/films/stores/film_store';
 import { useScheduleStore } from '@/features/films/stores/schedule_store';
