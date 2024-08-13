@@ -25,7 +25,7 @@ const routeGroups: { [key: string]: string[] } = {
     'accounts.edit'
   ],
   halls: ['halls.index'],
-  films: ['films.index', 'films.new', 'films.edit', 'films.schedules']
+  films: ['films.index', 'films.new', 'films.edit', 'films.schedules', 'schedule.bookings']
 };
 
 function combineRoutes(keys: string[]): string[] {

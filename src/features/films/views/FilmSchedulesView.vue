@@ -127,6 +127,7 @@ onMounted(async () => {
                   </td>
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton
+                      class="mr-3"
                       @click="
                         router.push({
                           name: 'schedule.edit',
@@ -137,6 +138,20 @@ onMounted(async () => {
                       "
                     >
                       Edit
+                    </SecondaryButton>
+
+                    <SecondaryButton
+                      @click="
+                        router.push({
+                          name: 'schedule.bookings',
+                          params: {
+                            filmId: film?.id,
+                            scheduleId: schedule.id
+                          }
+                        })
+                      "
+                    >
+                      Bookings
                     </SecondaryButton>
                   </td>
                 </tr>
