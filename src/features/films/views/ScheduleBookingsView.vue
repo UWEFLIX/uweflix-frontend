@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import { onBeforeMount, type Ref, ref } from 'vue';
+import { onBeforeMount, type Ref, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFilmStore } from '@/features/films/stores/film_store';
 import { useScheduleStore } from '@/features/films/stores/schedule_store';
@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import type Hall from '@/features/halls/models/hall';
 import { useBookingStore } from '@/features/films/stores/booking_store';
 import SeatCell from '@/features/films/views/components/SeatCell.vue';
+import type Seat from '@/features/films/models/seat';
 
 const router = useRouter();
 const filmStore = useFilmStore();
@@ -22,6 +23,11 @@ const film: Ref<Film | undefined> = ref(undefined);
 const schedule: Ref<Schedule | undefined> = ref(undefined);
 const hall: Ref<Hall | undefined> = ref(undefined);
 const bookedSeats: Ref<String[]> = ref([]);
+const selectedSeats: Ref<Seat[]> = ref([]);
+
+watch(() => selectedSeats.value, (newValue) => {
+  console.log(newValue);
+});
 
 onBeforeMount(async () => {
   isLoading.value = true;
@@ -59,11 +65,11 @@ onBeforeMount(async () => {
 
           <hr class="h-px bg-gray-200 border-0" />
 
-          <div class="flex flex-col items-center p-6 overflow-auto">
+          <div class="flex flex-col items-center py-6 overflow-auto">
             <!-- Halls -->
             <div v-for="row in hall?.no_of_rows" :key="row" class="flex flex-row">
               <div v-for="col in hall?.seats_per_row" :key="col">
-                <SeatCell :col="col" :row="row" :booked-seats="bookedSeats" />
+                <SeatCell :col="col" :row="row" :booked-seats="bookedSeats" v-model:selected-seats="selectedSeats" />
               </div>
             </div>
           </div>
