@@ -12,6 +12,7 @@ import type Hall from '@/features/halls/models/hall';
 import { useBookingStore } from '@/features/films/stores/booking_store';
 import SeatCell from '@/features/films/views/components/SeatCell.vue';
 import type Seat from '@/features/films/models/seat';
+import PrimaryButton from '@/components/PrimaryButton.vue';
 
 const router = useRouter();
 const filmStore = useFilmStore();
@@ -24,6 +25,7 @@ const schedule: Ref<Schedule | undefined> = ref(undefined);
 const hall: Ref<Hall | undefined> = ref(undefined);
 const bookedSeats: Ref<String[]> = ref([]);
 const selectedSeats: Ref<Seat[]> = ref([]);
+const showSale = ref(false);
 
 watch(() => selectedSeats.value, (newValue) => {
   console.log(newValue);
@@ -61,11 +63,18 @@ onBeforeMount(async () => {
             <div class="font-semibold text-lg sm:text-xl text-gray-900">
               {{`Bookings - ${schedule?.hall.hall_name} ${dayjs(schedule?.show_time).format('DD/MM/YYYY')}`}}
             </div>
+
+            <div class="flex items-center space-x-4">
+              <PrimaryButton @click="showSale = true">
+                <i class="bi bi-arrow-left me-2"></i>
+                <span>Sale</span>
+              </PrimaryButton>
+            </div>
           </div>
 
           <hr class="h-px bg-gray-200 border-0" />
 
-          <div class="flex flex-col items-center py-6 overflow-auto">
+          <div class="flex flex-col py-6 overflow-auto">
             <!-- Halls -->
             <div v-for="row in hall?.no_of_rows" :key="row" class="flex flex-row">
               <div v-for="col in hall?.seats_per_row" :key="col">
@@ -74,6 +83,22 @@ onBeforeMount(async () => {
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div
+      class="fixed overflow-auto flex flex-col shrink-0 top-0 right-0 z-40 h-full w-screen sm:w-[24rem] transition-transform border bg-white"
+      :class="{ 'translate-x-full': !showSale }"
+    >
+      <div class="flex items-center justify-between px-2 pt-2">
+        <!-- Close button -->
+        <button
+          @click="showSale = false"
+          type="button"
+          class="inline-flex items-center justify-center w-7 h-7 bg-transparent text-sm hover:bg-gray-200 text-gray-400 hover:text-gray-700 rounded-lg"
+        >
+          <i class="bi bi-x text-xl"></i>
+        </button>
       </div>
     </div>
   </DashboardLayout>
