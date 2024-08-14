@@ -8,14 +8,20 @@ import { useScheduleStore } from '@/features/films/stores/schedule_store';
 import type Film from '@/features/films/models/film';
 import type Schedule from '@/features/films/models/schedule';
 import dayjs from 'dayjs';
+import type Hall from '@/features/halls/models/hall';
+import { useBookingStore } from '@/features/films/stores/booking_store';
+import SeatCell from '@/features/films/views/components/SeatCell.vue';
 
 const router = useRouter();
 const filmStore = useFilmStore();
 const scheduleStore = useScheduleStore();
+const bookingStore = useBookingStore();
 
 const isLoading = ref(false);
 const film: Ref<Film | undefined> = ref(undefined);
 const schedule: Ref<Schedule | undefined> = ref(undefined);
+const hall: Ref<Hall | undefined> = ref(undefined);
+const bookedSeats: Ref<String[]> = ref([]);
 
 onBeforeMount(async () => {
   isLoading.value = true;
@@ -25,6 +31,8 @@ onBeforeMount(async () => {
   if (filmId) {
     film.value = await filmStore.getFilm(filmId);
     schedule.value = await scheduleStore.getSchedule(scheduleId);
+    hall.value = schedule.value.hall;
+    bookedSeats.value = await bookingStore.getBookedSeats(schedule.value.id);
   }
   isLoading.value = false;
 });
@@ -35,7 +43,7 @@ onBeforeMount(async () => {
     <template #breadcrumbs>
       <Breadcrumb title="Films" icon="bi-film" :to="{ name: 'films.index' }" />
       <Breadcrumb :title="film ? film.title : 'Undefined'" icon="bi-chevron-right" />
-      <Breadcrumb title="Schedules" icon="bi-chevron-right" :to="{ name: 'films.schedules', params: {id: film?.id} }" />
+      <Breadcrumb v-if="film" title="Schedules" icon="bi-chevron-right" :to="{ name: 'films.schedules', params: {id: film?.id} }" />
       <Breadcrumb :title="schedule ? `${schedule?.hall.hall_name} ${dayjs(schedule?.show_time).format('DD/MM/YYYY')}` : 'Undefined'" icon="bi-chevron-right" />
     </template>
 
@@ -50,6 +58,15 @@ onBeforeMount(async () => {
           </div>
 
           <hr class="h-px bg-gray-200 border-0" />
+
+          <div class="flex flex-col items-center p-6 overflow-auto">
+            <!-- Halls -->
+            <div v-for="row in hall?.no_of_rows" :key="row" class="flex flex-row">
+              <div v-for="col in hall?.seats_per_row" :key="col">
+                <SeatCell :col="col" :row="row" :booked-seats="bookedSeats" />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
