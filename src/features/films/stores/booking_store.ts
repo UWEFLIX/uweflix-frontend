@@ -14,5 +14,10 @@ export const useBookingStore = defineStore({
       const authStore = useAuthStore();
       return await this.bookingRepository.getBookedSeats(authStore.token!, scheduleId);
     },
+
+    async bookSeats(scheduleId: number, data: Object) {
+      const authStore = useAuthStore();
+      await this.bookingRepository.bookSeats(authStore.token!, scheduleId, data);
+    }
   }
 });

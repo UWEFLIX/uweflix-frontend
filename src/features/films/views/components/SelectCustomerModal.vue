@@ -13,6 +13,7 @@ const emit = defineEmits(['update:selected-customer']);
 const props = defineProps<{
   selectedCustomer: {
     id: number;
+    accountId: number;
     name: string;
     email: string;
     discountRate: number;
@@ -52,6 +53,7 @@ async function onClick(customer: User) {
   const account = await accountStore.getUserAccount(customer.id)
   proxySelectedCustomer.value = {
     id: customer.id,
+    accountId: account.id,
     name: customer.name,
     email: customer.email,
     discountRate: account.discount_rate

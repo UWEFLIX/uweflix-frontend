@@ -29,6 +29,7 @@ const selectedSeats: Ref<Seat[]> = ref([]);
 const showSale = ref(false);
 const selectedCustomer: Ref<{
   id: number;
+  accountId: number;
   name: string;
   email: string;
   discountRate: number;
@@ -152,7 +153,7 @@ onBeforeMount(async () => {
         </button>
       </div>
 
-      <div class="flex flex-col">
+      <div class="h-full flex flex-col overflow-y-auto pb-6">
         <div v-if="selectedSeats.length < 1" class="text-sm text-gray-500 px-4">Select seats to proceed with the sale
         </div>
 
@@ -247,6 +248,11 @@ onBeforeMount(async () => {
           </div>
         </div>
       </div>
+
+      <button class="inline-flex items-center px-4 py-3 bg-gray-800 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150 disabled:opacity-50"
+              :disabled="selectedSeats.length < 1 || !selectedCustomer">
+        <span class="w-full text-center">Confirm Sale</span>
+      </button>
     </div>
   </DashboardLayout>
 </template>
