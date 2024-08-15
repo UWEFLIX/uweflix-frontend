@@ -22,7 +22,7 @@ onMounted(async () => {
   const accountId = router.currentRoute.value.params.id as string;
 
   if (accountId) {
-    account.value = await accountStore.getAccount(accountId);
+    account.value = await accountStore.getClubAccount(accountId);
     club.value = await clubStore.getClub(String(account.value.entity_id));
   }
   isLoading.value = false;

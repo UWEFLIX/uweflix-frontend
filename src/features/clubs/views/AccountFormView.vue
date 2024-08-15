@@ -72,7 +72,7 @@ onBeforeMount(async () => {
   }
 
   if (accountId) {
-    const existingAccount = await accountStore.getAccount(accountId);
+    const existingAccount = await accountStore.getClubAccount(accountId);
     account.value = existingAccount;
     form.value = {
       id: existingAccount.id,
