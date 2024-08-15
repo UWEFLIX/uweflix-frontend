@@ -11,7 +11,7 @@ import type Account from '@/features/clubs/models/account';
 import { useBookingStore } from '@/features/films/stores/booking_store';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 
-const emit = defineEmits(['update:bookedSeats']);
+const emit = defineEmits(['update:booked-seats']);
 const props = defineProps<{
   scheduleId: number,
   selectedSeats: Seat[],
@@ -31,7 +31,7 @@ const isCash = ref(0);
 const proxyBookedSeats = computed({
   get: () => props.bookedSeats,
   set: (newValue: String[]) => {
-    emit('update:bookedSeats', newValue)
+    emit('update:booked-seats', newValue)
   }
 })
 
@@ -47,7 +47,8 @@ function bookSeats() {
     })
 
     const newSeats = props.selectedSeats.map(seat => seat.seat_no)
-    proxyBookedSeats.value = [...proxyBookedSeats, ...newSeats]
+    proxyBookedSeats.value = [...proxyBookedSeats.value, ...newSeats]
+    isShowing.value = false;
   } catch (e: any) {
     toast.error(e.message)
   }

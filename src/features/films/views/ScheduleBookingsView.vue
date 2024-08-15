@@ -79,7 +79,7 @@ const total = computed(() => {
 watch(() => selectedCustomer.value, (newValue) => {
   console.log(newValue);
   for (const seat of selectedSeats.value) {
-    seat.user_id = newValue?.customer.id;
+    seat.user_id = newValue?.customer.id!;
   }
 });
 
@@ -253,7 +253,7 @@ onBeforeMount(async () => {
       </div>
 
       <ConfirmSaleModal :selected-seats="selectedSeats" :selected-customer="selectedCustomer"
-                        :schedule-id="schedule?.id" v-model:booked-seats="bookedSeats" />
+                        :schedule-id="schedule?.id!" v-model:booked-seats="bookedSeats" />
     </div>
   </DashboardLayout>
 </template>
