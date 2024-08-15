@@ -22,6 +22,11 @@ export const useUserStore = defineStore({
       return this.userRepository.getUser(authStore.token!, id);
     },
 
+    async searchUser(name: string) {
+      const authStore = useAuthStore();
+      return this.userRepository.searchUser(authStore.token!, name);
+    },
+
     async getRoles() {
       const authStore = useAuthStore();
       this.roles = await this.userRepository.getRoles(authStore.token!);

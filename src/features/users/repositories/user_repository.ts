@@ -8,6 +8,7 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT;
 interface IUserRepository {
   getUsers(token: string): Promise<User[]>;
   getUser(token: string, id: string): Promise<User>;
+  searchUser(token: string, name: string): Promise<User[]>;
   getRoles(token: string): Promise<Role[]>;
   createUser(token: string, form: any): Promise<User>;
   updateUser(token: string, form: any): Promise<User>;
@@ -29,6 +30,14 @@ export default class UserRepository implements IUserRepository {
     });
 
     return res.data as User;
+  }
+
+  async searchUser(token: string, name: string) {
+    const res = await axios.get(`${baseURL}/users/users/${name}`, {
+      headers: getApiHeaders(token)
+    });
+
+    return res.data as User[];
   }
 
   async getRoles(token: string) {

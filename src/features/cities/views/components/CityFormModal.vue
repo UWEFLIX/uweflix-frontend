@@ -30,7 +30,7 @@ watch(
   () => props.open,
   () => {
     if (props.open) {
-      form.value = props.city ? { ...props.city } : { id: undefined, name: '' };
+      form.value = props.schedule ? { ...props.schedule } : { id: undefined, name: '' };
     }
   },
   { immediate: true }

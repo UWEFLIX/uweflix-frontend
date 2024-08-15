@@ -86,6 +86,7 @@ onBeforeMount(async () => {
     const existingFilm = await filmStore.getFilm(filmId);
     film.value = existingFilm;
     form.value = { ...existingFilm };
+    form.value.images = null;
     toDate.value = new Date(existingFilm.on_air_to);
     fromDate.value = new Date(existingFilm.on_air_from);
 

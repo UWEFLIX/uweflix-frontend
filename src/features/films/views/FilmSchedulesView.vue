@@ -11,6 +11,7 @@ import { useFilmStore } from '../stores/film_store';
 import type Film from '../models/film';
 import type Schedule from '../models/schedule';
 import dayjs from 'dayjs';
+import ScheduleFormModal from '@/features/films/views/components/ScheduleFormModal.vue';
 
 const router = useRouter();
 const filmStore = useFilmStore();
@@ -19,6 +20,17 @@ const scheduleStore = useScheduleStore();
 const isLoading = ref(false);
 const film: Ref<Film | undefined> = ref(undefined);
 const schedules: Ref<Schedule[]> = ref([]);
+const isOpeningForm = ref(false);
+const selectedSchedule: Ref<Schedule | undefined> = ref(undefined);
+
+async function listChanged() {
+  isOpeningForm.value = false;
+  schedules.value = [];
+
+  isLoading.value = true;
+  schedules.value = await scheduleStore.getSchedules(film.value?.id!);
+  isLoading.value = false;
+}
 
 onMounted(async () => {
   isLoading.value = true;
@@ -53,7 +65,10 @@ onMounted(async () => {
             <div class="flex items-center gap-4">
               <PrimaryButton
                 v-if="film"
-                @click="router.push({ name: 'schedules.new', params: { filmId: film.id } })"
+                @click="
+                  selectedSchedule = undefined;
+                  isOpeningForm = true;
+                "
               >
                 New Schedule
               </PrimaryButton>
@@ -127,16 +142,27 @@ onMounted(async () => {
                   </td>
                   <td class="whitespace-nowrap px-6 py-4">
                     <SecondaryButton
+                      class="mr-3"
+                      @click="
+                        selectedSchedule = schedule;
+                        isOpeningForm = true;
+                      "
+                    >
+                      Edit
+                    </SecondaryButton>
+
+                    <SecondaryButton
                       @click="
                         router.push({
-                          name: 'schedule.edit',
+                          name: 'schedule.bookings',
                           params: {
-                            id: schedule.id
+                            filmId: film?.id,
+                            scheduleId: schedule.id
                           }
                         })
                       "
                     >
-                      Edit
+                      Bookings
                     </SecondaryButton>
                   </td>
                 </tr>
@@ -146,5 +172,14 @@ onMounted(async () => {
         </div>
       </div>
     </div>
+
+    <ScheduleFormModal
+      v-if="film"
+      :film="film"
+      :schedule="selectedSchedule"
+      :open="isOpeningForm"
+      @close="isOpeningForm = false"
+      @list-changed="listChanged"
+    />
   </DashboardLayout>
 </template>

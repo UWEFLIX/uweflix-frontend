@@ -6,7 +6,8 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT;
 
 interface IAccountRepository {
   getClubAccounts(token: string, club_id: number): Promise<Account[]>;
-  getAccount(token: string, id: string): Promise<Account>;
+  geClubAccount(token: string, id: string): Promise<Account>;
+  getUserAccount(token: string, id: number): Promise<Account>;
   createAccount(token: string, form: any): Promise<Account>;
   updateAccount(token: string, form: any): Promise<Account>;
   // deleteAccount(token: string, form: any): Promise<void>
@@ -24,8 +25,16 @@ export default class AccountRepository implements IAccountRepository {
     return res.data as Account[];
   }
 
-  async getAccount(token: string, id: string): Promise<Account> {
+  async geClubAccount(token: string, id: string): Promise<Account> {
     const res = await axios.get(`${baseURL}/accounts/club/account/${id}`, {
+      headers: getApiHeaders(token)
+    });
+
+    return res.data as Account;
+  }
+
+  async getUserAccount(token: string, id: number): Promise<Account> {
+    const res = await axios.get(`${baseURL}/accounts/user/account/${id}`, {
       headers: getApiHeaders(token)
     });
 

@@ -14,6 +14,7 @@ import HallsIndexView from '@/features/halls/views/HallsIndexView.vue';
 import FilmsIndexView from '@/features/films/views/FilmsIndexView.vue';
 import FilmFormView from '@/features/films/views/FilmFormView.vue';
 import FilmSchedulesView from '@/features/films/views/FilmSchedulesView.vue';
+import ScheduleBookingsView from '@/features/films/views/ScheduleBookingsView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -107,6 +108,11 @@ const router = createRouter({
       path: '/films/schedules/:id',
       name: 'films.schedules',
       component: FilmSchedulesView
+    },
+    {
+      path: '/films/:filmId/schedules/:scheduleId',
+      name: 'schedule.bookings',
+      component: ScheduleBookingsView
     }
   ]
 });
