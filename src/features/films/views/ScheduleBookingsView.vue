@@ -27,6 +27,32 @@ const bookedSeats: Ref<String[]> = ref([]);
 const selectedSeats: Ref<Seat[]> = ref([]);
 const showSale = ref(false);
 
+const personTypes = [
+  {
+    id: 1,
+    person_type: "Adult",
+    discount_amount: 0,
+    class_name: "PERSON_TYPE"
+  },
+  {
+    id: 2,
+    person_type: "Child",
+    discount_amount: 20,
+    class_name: "PERSON_TYPE"
+  },
+  {
+    id: 3,
+    person_type: "Student",
+    discount_amount: 10,
+    class_name: "PERSON_TYPE"
+  }
+];
+
+function getPersonType(id: number) {
+  return personTypes.find(type => type.id === id);
+}
+
+
 watch(() => selectedSeats.value, (newValue) => {
   console.log(newValue);
 });
@@ -100,6 +126,55 @@ onBeforeMount(async () => {
           <i class="bi bi-x text-xl"></i>
         </button>
       </div>
+
+      <div class="flex flex-col p-4">
+        <div class="font-semibold text-lg text-gray-900 mb-3">Sale</div>
+
+        <div v-if="selectedSeats.length < 1" class="text-sm text-gray-500">Select seats to proceed with the sale</div>
+        <div v-else class="flex flex-col">
+          <div class="flex flex-col gap-2 mb-3">
+            <!-- Selected tickets -->
+            <div v-for="seat in selectedSeats" :key="seat.seat_no" class="p-2.5 border border-gray-300 rounded-lg">
+              <div class="text-sm text-gray-600 mb-2">Seat #{{ seat.seat_no }}</div>
+
+              <select
+                class="w-full p-1.5 border bg-white border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mb-2"
+                v-model="seat.person_type_id"
+                id="is-active"
+              >
+                <option :value="0" selected disabled>Select person type</option>
+                <option v-for="type in personTypes" :key="type.id" :value="type.id">{{ type.person_type }}</option>
+              </select>
+
+              <div class="flex flex-row items-center justify-between text-sm text-gray-600 mb-2">
+                <div>Price £{{ schedule?.ticket_price }}</div>
+
+                <div v-if="seat.person_type_id !== 0">
+                  <span class="me-1">dis.</span>
+                  <span>
+                  {{ getPersonType(seat.person_type_id)?.discount_amount }}%
+                </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col"></div>
+        </div>
+      </div>
     </div>
   </DashboardLayout>
 </template>
+
+<style scoped>
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none; /* Add the standard property 'appearance' */
+  background: transparent
+  url("data:image/svg+xml;utf8,<svg fill='grey' height='28' viewBox='0 0 24 24' width='28' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>")
+  no-repeat;
+  background-position-x: 99%;
+  background-position-y: 40%;
+}
+</style>
