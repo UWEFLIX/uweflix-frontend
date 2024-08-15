@@ -15,9 +15,9 @@ export const useBookingStore = defineStore({
       return await this.bookingRepository.getBookedSeats(authStore.token!, scheduleId);
     },
 
-    async bookSeats(scheduleId: number, data: Object) {
+    async bookSeats(data: Object) {
       const authStore = useAuthStore();
-      await this.bookingRepository.bookSeats(authStore.token!, scheduleId, data);
+      await this.bookingRepository.bookSeats(authStore.token!, data);
     }
   }
 });

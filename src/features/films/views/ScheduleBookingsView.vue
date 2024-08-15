@@ -14,6 +14,9 @@ import SeatCell from '@/features/films/views/components/SeatCell.vue';
 import type Seat from '@/features/films/models/seat';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import SelectCustomerModal from '@/features/films/views/components/SelectCustomerModal.vue';
+import CompleteSaleModal from '@/features/films/views/components/CompleteSaleModal.vue';
+import type User from '@/features/users/models/user';
+import type Account from '@/features/clubs/models/account';
 
 const router = useRouter();
 const filmStore = useFilmStore();
@@ -28,11 +31,8 @@ const bookedSeats: Ref<String[]> = ref([]);
 const selectedSeats: Ref<Seat[]> = ref([]);
 const showSale = ref(false);
 const selectedCustomer: Ref<{
-  id: number;
-  accountId: number;
-  name: string;
-  email: string;
-  discountRate: number;
+  customer: User
+  account: Account
 } | undefined> = ref(undefined);
 
 const personTypes = [
@@ -73,11 +73,14 @@ const subtotal = computed(() => {
 });
 
 const total = computed(() => {
-  return subtotal.value - (subtotal.value * (selectedCustomer.value?.discountRate! ?? 0)) / 100;
+  return subtotal.value - (subtotal.value * (selectedCustomer.value?.account.discount_rate! ?? 0)) / 100;
 });
 
-watch(() => selectedSeats.value, (newValue) => {
+watch(() => selectedCustomer.value, (newValue) => {
   console.log(newValue);
+  for (const seat of selectedSeats.value) {
+    seat.user_id = newValue?.customer.id;
+  }
 });
 
 onBeforeMount(async () => {
@@ -178,17 +181,17 @@ onBeforeMount(async () => {
               </button>
 
               <div class="flex flex-row border-dashed border-b pb-1 mb-1">
-                {{ selectedCustomer.name }}
+                {{ selectedCustomer?.customer.name }}
               </div>
 
               <div class="flex flex-row mb-1">
                 <div class="w-1/4 font-semibold text-gray-700 mr-2">Email</div>
-                <div class="flex-grow text-gray-700 mr-2">{{ selectedCustomer.email ?? '-' }}</div>
+                <div class="flex-grow text-gray-700 mr-2">{{ selectedCustomer?.customer.email ?? '-' }}</div>
               </div>
 
               <div class="flex flex-row mb-1">
                 <div class="w-1/4 font-semibold text-gray-700 mr-2">Discount Rate</div>
-                <div class="flex-grow text-gray-700 mr-2">{{ selectedCustomer.discountRate ?? '-' }}%</div>
+                <div class="flex-grow text-gray-700 mr-2">{{ selectedCustomer?.account.discount_rate ?? '-' }}%</div>
               </div>
             </div>
           </div>
@@ -201,17 +204,17 @@ onBeforeMount(async () => {
 
             <div class="flex flex-row py-2.5 items-center justify-between border-b border-gray-300">
               <div>Subtotal</div>
-              <div>£{{ subtotal }}</div>
+              <div>£{{ subtotal.toFixed(2) }}</div>
             </div>
 
             <div class="flex flex-row py-2.5 items-center justify-between border-b border-gray-300">
               <div>Discount %</div>
-              <div>{{ selectedCustomer?.discountRate ?? 0 }}%</div>
+              <div>{{ selectedCustomer?.account.discount_rate ?? 0 }}%</div>
             </div>
 
             <div class="flex flex-row py-2.5 items-center justify-between font-semibold text-lg text-gray-700">
               <div class="uppercase">Total</div>
-              <div>£{{ total }}</div>
+              <div>£{{ total.toFixed(2) }}</div>
             </div>
           </div>
 
@@ -249,10 +252,7 @@ onBeforeMount(async () => {
         </div>
       </div>
 
-      <button class="inline-flex items-center px-4 py-3 bg-gray-800 border border-transparent font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 transition ease-in-out duration-150 disabled:opacity-50"
-              :disabled="selectedSeats.length < 1 || !selectedCustomer">
-        <span class="w-full text-center">Confirm Sale</span>
-      </button>
+      <CompleteSaleModal :selected-seats="selectedSeats" :selected-customer="selectedCustomer" :schedule-id="schedule?.id" />
     </div>
   </DashboardLayout>
 </template>

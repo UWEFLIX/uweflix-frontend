@@ -8,15 +8,13 @@ import { useToast } from 'vue-toastification';
 import { useUserStore } from '@/features/users/stores/user_store';
 import type User from '@/features/users/models/user';
 import { useAccountStore } from '@/features/clubs/stores/account_store';
+import type Account from '@/features/clubs/models/account';
 
 const emit = defineEmits(['update:selected-customer']);
 const props = defineProps<{
   selectedCustomer: {
-    id: number;
-    accountId: number;
-    name: string;
-    email: string;
-    discountRate: number;
+    customer: User
+    account: Account
   } | undefined
 }>();
 
@@ -52,11 +50,8 @@ const onInput = useDebounceFn(async (e: Event) => {
 async function onClick(customer: User) {
   const account = await accountStore.getUserAccount(customer.id)
   proxySelectedCustomer.value = {
-    id: customer.id,
-    accountId: account.id,
-    name: customer.name,
-    email: customer.email,
-    discountRate: account.discount_rate
+    customer: customer,
+    account: account
   }
   isShowing.value = false
 }

@@ -5,7 +5,7 @@ const baseURL = import.meta.env.VITE_API_ENDPOINT;
 
 interface IBookingRepository {
   getBookedSeats(token: string, scheduleId: number): Promise<String[]>;
-  bookSeats(token: string, scheduleId: number, data: Object): Promise<void>;
+  bookSeats(token: string, data: Object): Promise<void>;
 }
 
 export default class BookingRepository implements IBookingRepository {
@@ -17,8 +17,8 @@ export default class BookingRepository implements IBookingRepository {
     return res.data as String[];
   }
 
-  async bookSeats(token: string, scheduleId: number, data: Object): Promise<void> {
-    await axios.post(`${baseURL}/bookings/users/bookings/multiple/${scheduleId}`, data, {
+  async bookSeats(token: string, data: Object): Promise<void> {
+    await axios.post(`${baseURL}/bookings/users/bookings/multiple/`, data, {
       headers: getApiHeaders(token)
     });
   }
