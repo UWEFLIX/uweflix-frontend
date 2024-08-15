@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import DashboardLayout from '@/layouts/DashboardLayout.vue';
 import Breadcrumb from '@/components/Breadcrumb.vue';
-import { onBeforeMount, type Ref, ref, watch } from 'vue';
+import { computed, onBeforeMount, type Ref, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import { useFilmStore } from '@/features/films/stores/film_store';
 import { useScheduleStore } from '@/features/films/stores/schedule_store';
@@ -52,6 +52,17 @@ function getPersonType(id: number) {
   return personTypes.find(type => type.id === id);
 }
 
+function applyDiscount(price: number, discount: number) {
+  return price - (price * discount) / 100;
+}
+
+const subtotal = computed(() => {
+  return selectedSeats.value.reduce((acc, seat) => {
+    const personType = getPersonType(seat.person_type_id);
+    const personDiscount = personType?.discount_amount ?? 0;
+    return acc + applyDiscount(schedule.value?.ticket_price!, personDiscount);
+  }, 0);
+});
 
 watch(() => selectedSeats.value, (newValue) => {
   console.log(newValue);
@@ -134,13 +145,14 @@ onBeforeMount(async () => {
         <div v-else class="flex flex-col">
           <div class="flex flex-col gap-2 mb-3">
             <!-- Selected tickets -->
-            <div v-for="seat in selectedSeats" :key="seat.seat_no" class="p-2.5 border border-gray-300 rounded-lg">
+            <div v-for="seat in selectedSeats" :key="seat.seat_no" class="bg-blue-50 p-2.5 border border-blue-200 rounded-lg shadow-sm">
               <div class="text-sm text-gray-600 mb-2">Seat #{{ seat.seat_no }}</div>
 
               <select
+                id="person-type"
                 class="w-full p-1.5 border bg-white border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm mb-2"
                 v-model="seat.person_type_id"
-                id="is-active"
+                required
               >
                 <option :value="0" selected disabled>Select person type</option>
                 <option v-for="type in personTypes" :key="type.id" :value="type.id">{{ type.person_type }}</option>
@@ -159,7 +171,27 @@ onBeforeMount(async () => {
             </div>
           </div>
 
-          <div class="flex flex-col"></div>
+          <div class="flex flex-col border border-gray-300 rounded-lg shadow-sm">
+            <div class="flex flex-row p-2.5 items-center justify-between border-b border-gray-300">
+              <div>Qty</div>
+              <div>{{ selectedSeats.length }}</div>
+            </div>
+
+            <div class="flex flex-row p-2.5 items-center justify-between border-b border-gray-300">
+              <div>Subtotal</div>
+              <div>{{ subtotal }}</div>
+            </div>
+
+            <div class="flex flex-row p-2.5 items-center justify-between border-b border-gray-300">
+              <div>Discount percent</div>
+              <div>0%</div>
+            </div>
+
+            <div class="flex flex-row p-2.5 items-center justify-between">
+              <div>Total</div>
+              <div>999</div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
