@@ -119,7 +119,7 @@ onMounted(async () => {
 
           <div class="mb-4">
             <div class="flex-1">
-              <InputLabel for="hall" value="Show Time" class="mb-1" />
+              <InputLabel for="ticket-price" value="Ticket Price" class="mb-1" />
               <NumberInput class="w-full" v-model="form.ticket_price" step="0.01" />
               <InputError class="mt-2" message="" />
             </div>

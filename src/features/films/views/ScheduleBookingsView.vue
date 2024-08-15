@@ -14,7 +14,7 @@ import SeatCell from '@/features/films/views/components/SeatCell.vue';
 import type Seat from '@/features/films/models/seat';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 import SelectCustomerModal from '@/features/films/views/components/SelectCustomerModal.vue';
-import CompleteSaleModal from '@/features/films/views/components/CompleteSaleModal.vue';
+import ConfirmSaleModal from '@/features/films/views/components/ConfirmSaleModal.vue';
 import type User from '@/features/users/models/user';
 import type Account from '@/features/clubs/models/account';
 
@@ -252,7 +252,8 @@ onBeforeMount(async () => {
         </div>
       </div>
 
-      <CompleteSaleModal :selected-seats="selectedSeats" :selected-customer="selectedCustomer" :schedule-id="schedule?.id" />
+      <ConfirmSaleModal :selected-seats="selectedSeats" :selected-customer="selectedCustomer"
+                        :schedule-id="schedule?.id" v-model:booked-seats="bookedSeats" />
     </div>
   </DashboardLayout>
 </template>

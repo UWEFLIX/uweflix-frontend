@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import SecondaryButton from '@/components/SecondaryButton.vue';
 import Modal from '@/components/Modal.vue';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useToast } from 'vue-toastification';
 import type Seat from '@/features/films/models/seat';
 import InputLabel from '@/components/InputLabel.vue';
@@ -11,13 +11,15 @@ import type Account from '@/features/clubs/models/account';
 import { useBookingStore } from '@/features/films/stores/booking_store';
 import PrimaryButton from '@/components/PrimaryButton.vue';
 
+const emit = defineEmits(['update:bookedSeats']);
 const props = defineProps<{
   scheduleId: number,
   selectedSeats: Seat[],
   selectedCustomer: {
     customer: User
     account: Account
-  } | undefined
+  } | undefined,
+  bookedSeats: String[]
 }>();
 
 const toast = useToast();
@@ -25,6 +27,13 @@ const bookingStore = useBookingStore();
 
 const isShowing = ref(false);
 const isCash = ref(0);
+
+const proxyBookedSeats = computed({
+  get: () => props.bookedSeats,
+  set: (newValue: String[]) => {
+    emit('update:bookedSeats', newValue)
+  }
+})
 
 function bookSeats() {
   try {
@@ -36,10 +45,12 @@ function bookSeats() {
       cash: isCash.value,
       class_name: "MULTIPLE_BOOKINGS"
     })
+
+    const newSeats = props.selectedSeats.map(seat => seat.seat_no)
+    proxyBookedSeats.value = [...proxyBookedSeats, ...newSeats]
   } catch (e: any) {
     toast.error(e.message)
   }
-
 }
 </script>
 
