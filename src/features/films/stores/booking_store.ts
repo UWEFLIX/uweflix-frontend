@@ -18,6 +18,11 @@ export const useBookingStore = defineStore({
     async bookSeats(data: Object) {
       const authStore = useAuthStore();
       await this.bookingRepository.bookSeats(authStore.token!, data);
+    },
+
+    async getMoviesByBookingCount() {
+      const authStore = useAuthStore();
+      return await this.bookingRepository.getMoviesByBookingCount(authStore.token!);
     }
   }
 });
