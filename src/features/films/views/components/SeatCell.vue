@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import { numberToTitle } from '@/features/utils/seat_utils';
 import type Seat from '@/features/films/models/seat';
-import * as sea from 'node:sea';
+import { SeatStatus } from '@/constants/seat_status_enum';
 
 const emit = defineEmits(['update:selectedSeats']);
 const props = defineProps<{
@@ -22,6 +22,20 @@ const isBooked = computed(() => {
 
 const isSelected = computed(() => {
   return props.selectedSeats.some(seat => seat.seat_no === seatNo.value);
+})
+
+const computedStatus = computed(() => {
+  if (isBooked.value) return SeatStatus.Booked;
+  if (isSelected.value) return SeatStatus.Selected;
+  return SeatStatus.Available;
+})
+
+const cellClasses = computed(() => {
+  return {
+    'Available': 'bg-gray-200 border-gray-300 text-gray-500 hover:bg-gray-300',
+    'Booked': 'bg-red-500 border-red-600 text-white',
+    'Selected': 'bg-blue-500 border-blue-600 text-white hover:bg-blue-600',
+  }[computedStatus.value]
 })
 
 const proxySelectedSeats = computed({
@@ -47,11 +61,7 @@ function toggleSeat() {
 
 <template>
   <button @click="toggleSeat" class="inline-flex w-10 h-8 items-center justify-center border rounded-md mx-1 my-1 transition-all"
-    :class="{
-      'bg-gray-200 border-gray-300 text-gray-500 hover:bg-gray-300': !isBooked,
-      'bg-red-500 border-red-600 text-white': isBooked,
-      'bg-blue-500 border-blue-600 text-white hover:bg-blue-600': isSelected,
-    }"
+    :class="cellClasses"
     :disabled="isBooked">
       <div class="text-xs text-center">{{ seatNo }}</div>
   </button>
