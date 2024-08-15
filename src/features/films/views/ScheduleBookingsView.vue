@@ -26,6 +26,7 @@ const hall: Ref<Hall | undefined> = ref(undefined);
 const bookedSeats: Ref<String[]> = ref([]);
 const selectedSeats: Ref<Seat[]> = ref([]);
 const showSale = ref(false);
+const discountAmount = ref(0);
 
 const personTypes = [
   {
@@ -62,6 +63,10 @@ const subtotal = computed(() => {
     const personDiscount = personType?.discount_amount ?? 0;
     return acc + applyDiscount(schedule.value?.ticket_price!, personDiscount);
   }, 0);
+});
+
+const total = computed(() => {
+  return subtotal.value - (subtotal.value * discountAmount.value) / 100;
 });
 
 watch(() => selectedSeats.value, (newValue) => {
@@ -127,7 +132,7 @@ onBeforeMount(async () => {
       class="fixed overflow-auto flex flex-col shrink-0 top-0 right-0 z-40 h-full w-screen sm:w-[24rem] transition-transform border bg-white"
       :class="{ 'translate-x-full': !showSale }"
     >
-      <div class="flex items-center justify-between px-2 pt-2">
+      <div class="flex flex-row items-center justify-between px-2 pt-3 mb-3">
         <!-- Close button -->
         <button
           @click="showSale = false"
@@ -138,12 +143,36 @@ onBeforeMount(async () => {
         </button>
       </div>
 
-      <div class="flex flex-col p-4">
-        <div class="font-semibold text-lg text-gray-900 mb-3">Sale</div>
-
+      <div class="flex flex-col">
         <div v-if="selectedSeats.length < 1" class="text-sm text-gray-500">Select seats to proceed with the sale</div>
+
+        <!-- Displayed when seats are selected -->
         <div v-else class="flex flex-col">
-          <div class="flex flex-col gap-2 mb-3">
+          <div class="flex flex-col border-b border-gray-300 text-sm text-gray-600 px-4 mb-6">
+            <div class="flex flex-row py-2.5 items-center justify-between border-b border-gray-300">
+              <div class="uppercase">Qty</div>
+              <div>{{ selectedSeats.length }}</div>
+            </div>
+
+            <div class="flex flex-row py-2.5 items-center justify-between border-b border-gray-300">
+              <div class="uppercase">Subtotal</div>
+              <div>£{{ subtotal }}</div>
+            </div>
+
+            <div class="flex flex-row py-2.5 items-center justify-between border-b border-gray-300">
+              <div class="uppercase">Discount %</div>
+              <div>{{ discountAmount }}%</div>
+            </div>
+
+            <div class="flex flex-row py-2.5 items-center justify-between font-semibold text-lg text-gray-700">
+              <div class="uppercase">Total</div>
+              <div>£{{ total }}</div>
+            </div>
+          </div>
+
+          <div class="flex flex-col gap-3 px-4 mb-3">
+            <h3 class="font-medium text-sm text-gray-600">Selected Seats</h3>
+
             <!-- Selected tickets -->
             <div v-for="seat in selectedSeats" :key="seat.seat_no" class="bg-blue-50 p-2.5 border border-blue-200 rounded-lg shadow-sm">
               <div class="text-sm text-gray-600 mb-2">Seat #{{ seat.seat_no }}</div>
@@ -167,28 +196,6 @@ onBeforeMount(async () => {
                 </span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <div class="flex flex-col border border-gray-300 rounded-lg shadow-sm">
-            <div class="flex flex-row p-2.5 items-center justify-between border-b border-gray-300">
-              <div>Qty</div>
-              <div>{{ selectedSeats.length }}</div>
-            </div>
-
-            <div class="flex flex-row p-2.5 items-center justify-between border-b border-gray-300">
-              <div>Subtotal</div>
-              <div>{{ subtotal }}</div>
-            </div>
-
-            <div class="flex flex-row p-2.5 items-center justify-between border-b border-gray-300">
-              <div>Discount percent</div>
-              <div>0%</div>
-            </div>
-
-            <div class="flex flex-row p-2.5 items-center justify-between">
-              <div>Total</div>
-              <div>999</div>
             </div>
           </div>
         </div>
