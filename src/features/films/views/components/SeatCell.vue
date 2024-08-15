@@ -52,7 +52,7 @@ function toggleSeat() {
   } else {
     proxySelectedSeats.value = [...proxySelectedSeats.value, {
       seat_no: seatNo.value,
-      person_type_id: 0,
+      person_type_id: 1,
       user_id: 0
     }];
   }

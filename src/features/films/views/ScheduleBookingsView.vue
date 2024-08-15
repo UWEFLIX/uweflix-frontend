@@ -154,7 +154,6 @@ onBeforeMount(async () => {
                 v-model="seat.person_type_id"
                 required
               >
-                <option :value="0" selected disabled>Select person type</option>
                 <option v-for="type in personTypes" :key="type.id" :value="type.id">{{ type.person_type }}</option>
               </select>
 
