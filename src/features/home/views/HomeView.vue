@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DashboardLayout from '@/layouts/DashboardLayout.vue'
-import Breadcrumb from '@/components/Breadcrumb.vue'
+import DashboardLayout from '@/layouts/DashboardLayout.vue';
+import Breadcrumb from '@/components/Breadcrumb.vue';
 import { Bar } from 'vue-chartjs';
 import {
   Chart as ChartJS,
@@ -14,14 +14,7 @@ import {
 import { useBookingStore } from '@/features/films/stores/booking_store';
 import { onBeforeMount, ref } from 'vue';
 
-ChartJS.register(
-  Title,
-  Tooltip,
-  Legend,
-  BarElement,
-  CategoryScale,
-  LinearScale
-);
+ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale);
 
 const bookingStore = useBookingStore();
 const moviesByBookingCountLabels = ref([]);
@@ -32,13 +25,7 @@ const chartData = ref({
   datasets: [
     {
       data: moviesByBookingCountData.value,
-      backgroundColor: [
-        '#F3A5A9',
-        '#F3A5A9',
-        '#F3A5A9',
-        '#F3A5A9',
-        '#F3A5A9'
-      ]
+      backgroundColor: ['#F3A5A9', '#F3A5A9', '#F3A5A9', '#F3A5A9', '#F3A5A9']
     }
   ]
 });
@@ -54,25 +41,19 @@ const chartOptions = {
 
 onBeforeMount(async () => {
   const moviesByBookingCount: any = await bookingStore.getMoviesByBookingCount();
-  moviesByBookingCountLabels.value = moviesByBookingCount.map((movie: any) => movie.film_title)
-  moviesByBookingCountData.value = moviesByBookingCount.map((movie: any) => movie.bookings)
+  moviesByBookingCountLabels.value = moviesByBookingCount.map((movie: any) => movie.film_title);
+  moviesByBookingCountData.value = moviesByBookingCount.map((movie: any) => movie.bookings);
 
   chartData.value = {
     labels: moviesByBookingCountLabels.value,
     datasets: [
       {
         data: moviesByBookingCountData.value,
-        backgroundColor: [
-          '#EF4444',
-          '#EF4444',
-          '#EF4444',
-          '#EF4444',
-          '#EF4444'
-        ]
+        backgroundColor: ['#EF4444', '#EF4444', '#EF4444', '#EF4444', '#EF4444']
       }
     ]
-  }
-})
+  };
+});
 </script>
 
 <template>
@@ -82,9 +63,7 @@ onBeforeMount(async () => {
     </template>
 
     <div class="py-12">
-      <div
-        class="grid grid-cols-1 md:grid-cols-2 max-w-7xl gap-4 sm:gap-6 mx-auto sm:px-6 lg:px-8"
-      >
+      <div class="grid grid-cols-1 md:grid-cols-2 max-w-7xl gap-4 sm:gap-6 mx-auto sm:px-6 lg:px-8">
         <div class="bg-white shadow-sm sm:rounded-lg p-4 sm:p-6">
           <h1 class="font-bold text-gray-900">Most Booked</h1>
           <Bar id="my-chart-id" :options="chartOptions" :data="chartData" />

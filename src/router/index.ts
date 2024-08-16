@@ -16,6 +16,19 @@ import FilmFormView from '@/features/films/views/FilmFormView.vue';
 import FilmSchedulesView from '@/features/films/views/FilmSchedulesView.vue';
 import ScheduleBookingsView from '@/features/films/views/ScheduleBookingsView.vue';
 
+function hasRoles(roles: string[]) {
+  const authStore = useAuthStore();
+  const tokenContent = authStore.tokenContent;
+
+  console.log(tokenContent);
+
+  if (!tokenContent) {
+    return false;
+  }
+
+  return roles.some((role) => tokenContent.roles.includes(role));
+}
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -32,87 +45,104 @@ const router = createRouter({
     {
       path: '/cities',
       name: 'cities.index',
-      component: CitiesIndexView
+      component: CitiesIndexView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/users',
       name: 'users.index',
-      component: UsersIndexView
+      component: UsersIndexView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/users/new',
       name: 'users.new',
-      component: UserFormView
+      component: UserFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/users/edit/:id',
       name: 'users.edit',
-      component: UserFormView
+      component: UserFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/clubs',
       name: 'clubs.index',
-      component: ClubIndexView
+      component: ClubIndexView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager', 'Account Manager'])
     },
     {
       path: '/clubs/new',
       name: 'clubs.new',
-      component: ClubFormView
+      component: ClubFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/clubs/edit/:id',
       name: 'clubs.edit',
-      component: ClubFormView
+      component: ClubFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/clubs/:id/accounts',
       name: 'clubs.accounts',
-      component: ClubAccountsView
+      component: ClubAccountsView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Account Manager'])
     },
     {
       path: '/accounts/:id/details',
       name: 'accounts.details',
-      component: AccountDetailsView
+      component: AccountDetailsView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Account Manager'])
     },
     {
       path: '/clubs/:clubId/accounts/new',
       name: 'accounts.new',
-      component: AccountFormView
+      component: AccountFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Account Manager'])
     },
     {
       path: '/clubs/:clubId/accounts/:accountId/edit',
       name: 'accounts.edit',
-      component: AccountFormView
+      component: AccountFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Account Manager'])
     },
     {
       path: '/halls',
       name: 'halls.index',
-      component: HallsIndexView
+      component: HallsIndexView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/films',
       name: 'films.index',
-      component: FilmsIndexView
+      component: FilmsIndexView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager', 'Cashier'])
     },
     {
       path: '/films/new',
       name: 'films.new',
-      component: FilmFormView
+      component: FilmFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/films/edit/:id',
       name: 'films.edit',
-      component: FilmFormView
+      component: FilmFormView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager'])
     },
     {
       path: '/films/schedules/:id',
       name: 'films.schedules',
-      component: FilmSchedulesView
+      component: FilmSchedulesView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager', 'Cashier'])
     },
     {
       path: '/films/:filmId/schedules/:scheduleId',
       name: 'schedule.bookings',
-      component: ScheduleBookingsView
+      component: ScheduleBookingsView,
+      beforeEnter: (to, from) => hasRoles(['Admin', 'Cinema Manager', 'Cashier'])
     }
   ]
 });
