@@ -1,17 +1,26 @@
+<script setup lang="ts">
+import type Booking from '../../models/booking';
+import dayjs from 'dayjs';
+
+defineProps<{
+  booking: Booking;
+}>();
+</script>
+
 <template>
   <div class="cardWrap">
     <div class="card cardLeft">
-      <h1>Startup <span>Cinema</span></h1>
+      <h1>UWEFLIX <span>Cinema</span></h1>
       <div class="title">
-        <h2>How I met your Mother</h2>
+        <h2>{{ booking.schedule.film.title }}</h2>
         <span>movie</span>
       </div>
       <div class="seat">
-        <h2>156</h2>
+        <h2>{{ booking.seat_no }}</h2>
         <span>seat</span>
       </div>
       <div class="time">
-        <h2>12:00</h2>
+        <h2>{{ dayjs(booking.created).format('HH:mm') }}</h2>
         <span>time</span>
       </div>
     </div>
@@ -19,7 +28,7 @@
     <div class="card cardRight">
       <div class="eye"></div>
       <div class="number">
-        <h3>156</h3>
+        <h3>{{ booking.seat_no }}</h3>
         <span>seat</span>
       </div>
     </div>

@@ -1,4 +1,5 @@
 import type Hall from '@/features/halls/models/hall';
+import type Film from './film';
 
 export default interface Schedule {
   id: number;
@@ -9,4 +10,5 @@ export default interface Schedule {
   ticket_price: number;
   class_name: string;
   hall: Hall;
+  film: Film;
 }

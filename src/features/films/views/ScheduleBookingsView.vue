@@ -185,7 +185,7 @@ onBeforeMount(async () => {
             <template #content>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div v-for="booking in batch.bookings" :key="booking.id">
-                  <Ticket />
+                  <Ticket :booking="booking" />
                 </div>
               </div>
             </template>
