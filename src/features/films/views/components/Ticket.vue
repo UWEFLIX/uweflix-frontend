@@ -20,7 +20,7 @@ defineProps<{
         <span>seat</span>
       </div>
       <div class="time">
-        <h2>{{ dayjs(booking.created).format('HH:mm') }}</h2>
+        <h2>{{ dayjs(booking.schedule.show_time).format('HH:mm') }}</h2>
         <span>time</span>
       </div>
     </div>
