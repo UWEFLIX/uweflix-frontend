@@ -1,6 +1,7 @@
 import axios from 'axios';
 import getApiHeaders from '@/constants/api_headers';
 import type Schedule from '@/features/films/models/schedule';
+import type Batch from '../models/batch';
 
 const baseURL = import.meta.env.VITE_API_ENDPOINT;
 
@@ -9,6 +10,7 @@ interface IScheduleRepository {
   getSchedule(token: string, id: string): Promise<Schedule>;
   createSchedule(token: string, form: any): Promise<Schedule>;
   updateSchedule(token: string, form: any): Promise<Schedule>;
+  getBatchBookings(token: string, scheduleId: number): Promise<any>;
   // deleteUser(token: string, form: any): Promise<void>
 }
 
@@ -43,6 +45,14 @@ export default class ScheduleRepository implements IScheduleRepository {
     });
 
     return res.data as Schedule;
+  }
+
+  async getBatchBookings(token: string, scheduleId: number) {
+    const res = await axios.get(`${baseURL}/films/schedules/scheduled/bookings/${scheduleId}`, {
+      headers: getApiHeaders(token)
+    });
+
+    return res.data as Batch[];
   }
 
   // async deleteUser(token: string, form: any) {

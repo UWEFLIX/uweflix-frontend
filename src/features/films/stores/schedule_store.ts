@@ -28,6 +28,11 @@ export const useScheduleStore = defineStore({
     async updateSchedule(form: any) {
       const authStore = useAuthStore();
       return await this.scheduleRepository.updateSchedule(authStore.token!, form);
+    },
+
+    async getBatchBookings(scheduleId: number) {
+      const authStore = useAuthStore();
+      return await this.scheduleRepository.getBatchBookings(authStore.token!, scheduleId);
     }
 
     // async deleteUser(form: any) {

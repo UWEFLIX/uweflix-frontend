@@ -20,8 +20,6 @@ function hasRoles(roles: string[]) {
   const authStore = useAuthStore();
   const tokenContent = authStore.tokenContent;
 
-  console.log(tokenContent);
-
   if (!tokenContent) {
     return false;
   }
