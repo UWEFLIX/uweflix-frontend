@@ -129,11 +129,17 @@ onBeforeMount(async () => {
 
           <hr class="h-px bg-gray-200 border-0" />
 
-          <div class="flex flex-col py-6 overflow-auto">
-            <!-- Halls -->
-            <div v-for="row in hall?.no_of_rows" :key="row" class="flex flex-row">
-              <div v-for="col in hall?.seats_per_row" :key="col">
-                <SeatCell :col="col" :row="row" :booked-seats="bookedSeats" v-model:selected-seats="selectedSeats" />
+          <div class="flex flex-col overflow-x-auto py-6 items-center">
+            <div class="mx-6">
+              <div class="w-full bg-gray-50 p-2 border border-gray-300 text-center rounded-lg mb-3">
+                Screen
+              </div>
+
+              <!-- Halls -->
+              <div v-for="row in hall?.no_of_rows" :key="row" class="flex flex-row">
+                <div v-for="col in hall?.seats_per_row" :key="col">
+                  <SeatCell :col="col" :row="row" :booked-seats="bookedSeats" v-model:selected-seats="selectedSeats" />
+                </div>
               </div>
             </div>
           </div>

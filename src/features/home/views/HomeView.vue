@@ -33,11 +33,11 @@ const chartData = ref({
     {
       data: moviesByBookingCountData.value,
       backgroundColor: [
-        '#EF4444',
-        '#EF4444',
-        '#EF4444',
-        '#EF4444',
-        '#EF4444'
+        '#F3A5A9',
+        '#F3A5A9',
+        '#F3A5A9',
+        '#F3A5A9',
+        '#F3A5A9'
       ]
     }
   ]
