@@ -181,7 +181,12 @@ onBeforeMount(async () => {
             <div class="font-semibold text-lg sm:text-xl text-gray-900">Tickets</div>
           </div>
 
-          <BatchAccordion v-for="batch in batchBookings" :key="batch.batch_ref" :batch="batch">
+          <BatchAccordion
+            v-for="batch in batchBookings"
+            :key="batch.batch_ref"
+            :batch="batch"
+            class="pb-6"
+          >
             <template #content>
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div v-for="booking in batch.bookings" :key="booking.id">
