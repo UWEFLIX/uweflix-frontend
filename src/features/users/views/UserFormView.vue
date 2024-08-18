@@ -27,7 +27,6 @@ const form: Ref<any> = ref({
   id: 0,
   name: '',
   email: '',
-  password: '',
   roles: [],
   status: ''
 });
@@ -119,12 +118,6 @@ onBeforeMount(async () => {
                 <div class="flex-1">
                   <InputLabel for="email" value="Email" class="mb-1" />
                   <TextInput v-model="form.email" id="email" class="w-full" required />
-                  <InputError class="mt-2" message="" />
-                </div>
-
-                <div v-if="!user" class="flex-1">
-                  <InputLabel for="password" value="Password" class="mb-1" />
-                  <TextInput v-model="form.password" id="password" class="w-full" required />
                   <InputError class="mt-2" message="" />
                 </div>
               </div>
